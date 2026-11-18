@@ -7,9 +7,13 @@ export const SITE_DESCRIPTION =
 
 // Placeholder contact details: replace before launch.
 export const CONTACT = {
-	phone: '(817) 555-0123',
-	phoneHref: 'tel:+18175550123',
+	phone: '(469) 704-9896',
+	phoneHref: 'tel:+14697049896',
 	email: 'hello@arlingtonwebsites.com',
+	// Hides the email address wherever it's displayed. Forms still use it as a fallback.
+	showEmail: false,
+	// WhatsApp click-to-chat (wa.me): opens a chat with this number and a pre-filled greeting.
+	whatsapp: 'https://wa.me/14697049896?text=' + encodeURIComponent('Hi! I have a question about a website for my business.'),
 	area: 'Arlington, TX',
 };
 

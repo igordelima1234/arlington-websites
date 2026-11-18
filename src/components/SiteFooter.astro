@@ -49,7 +49,8 @@ const columns = [
 				<h2 class="t-label">Get in touch</h2>
 				<ul>
 					<li><a href={CONTACT.phoneHref}><Icon name="phone" size={16} />{CONTACT.phone}</a></li>
-					<li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={16} />{CONTACT.email}</a></li>
+					<li><a href={CONTACT.whatsapp} target="_blank" rel="noopener"><Icon name="whatsapp" size={16} />WhatsApp us</a></li>
+					{CONTACT.showEmail && <li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={16} />{CONTACT.email}</a></li>}
 					<li><span><Icon name="map-pin" size={16} />{CONTACT.area}</span></li>
 				</ul>
 			</div>

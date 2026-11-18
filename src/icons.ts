@@ -31,6 +31,7 @@ export const icons = {
 	"map-pin": `<path d="M12 21.5S5 15.3 5 9.5a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9.5" r="2.5"/>`,
 	calendar: `<path d="M3 5h18v16H3zM3 10h18M8 3v4M16 3v4"/>`,
 	clock: `<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>`,
+	whatsapp: `<path d="M3.5 20.5l1.2-4.2A8.8 8.8 0 1 1 8 19.4z"/><path d="M9 8.5h1.3l.8 2-.9.7a4.4 4.4 0 0 0 2.6 2.6l.7-.9 2 .8v1.3a1 1 0 0 1-1 1A6.5 6.5 0 0 1 8 9.5a1 1 0 0 1 1-1z"/>`,
 
 	// Services
 	website: `<path d="M3 4h18v16H3zM3 9h18M6 6.5h1M9 6.5h1"/>`,
@@ -68,7 +69,7 @@ export const iconCategories: { name: string; note: string; icons: IconName[] }[]
 	{
 		name: "Contact",
 		note: "Ways to reach us. Always shown next to the actual detail (number, address, hours).",
-		icons: ["phone", "mail", "map-pin", "calendar", "clock"],
+		icons: ["phone", "whatsapp", "mail", "map-pin", "calendar", "clock"],
 	},
 	{
 		name: "Services & proof",

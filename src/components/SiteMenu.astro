@@ -59,7 +59,8 @@ import { MENU, CONTACT } from '../consts';
 			<p class="t-label foot-label">Talk to a real person</p>
 			<ul class="contact">
 				<li><a href={CONTACT.phoneHref}><Icon name="phone" size={20} />{CONTACT.phone}</a></li>
-				<li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={20} />{CONTACT.email}</a></li>
+				<li><a href={CONTACT.whatsapp} target="_blank" rel="noopener"><Icon name="whatsapp" size={20} />WhatsApp us</a></li>
+				{CONTACT.showEmail && <li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={20} />{CONTACT.email}</a></li>}
 				<li><span><Icon name="map-pin" size={20} />{CONTACT.area}</span></li>
 			</ul>
 			<a class="btn btn-primary book" href="/book-a-call"><Icon name="calendar" /><span>Book a call</span></a>

@@ -71,8 +71,10 @@ const agenda = [
 					</ul>
 
 					<p class="t-small alt">
-						Prefer to talk now? Call <a href={CONTACT.phoneHref}>{CONTACT.phone}</a> or email
-						<a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.
+						Prefer to talk now? Call <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>, message us on
+						<a href={CONTACT.whatsapp} target="_blank" rel="noopener">WhatsApp</a>{CONTACT.showEmail ? (
+							<>, or email <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></>
+						) : null}.
 					</p>
 				</div>
 
@@ -105,11 +107,16 @@ const agenda = [
 						<div class="fallback">
 							<span class="mark"><Icon name="phone" size={32} /></span>
 							<h2 class="t-h2">Let’s find a time</h2>
-							<p class="t-b">Call or email and we’ll set up a time that works for you.</p>
+							<p class="t-b">{CONTACT.showEmail ? 'Call, WhatsApp or email' : 'Call or WhatsApp us'} and we’ll set up a time that works for you.</p>
 							<a class="btn btn-primary big" href={CONTACT.phoneHref}><Icon name="phone" /><span>{CONTACT.phone}</span></a>
-							<a class="btn btn-secondary big" href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Book a call')}`}>
-								<Icon name="mail" /><span>Email us</span>
+							<a class="btn btn-secondary big" href={CONTACT.whatsapp} target="_blank" rel="noopener">
+								<Icon name="whatsapp" /><span>WhatsApp us</span>
 							</a>
+							{CONTACT.showEmail && (
+								<a class="btn btn-secondary big" href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Book a call')}`}>
+									<Icon name="mail" /><span>Email us</span>
+								</a>
+							)}
 						</div>
 					)}
 				</div>
