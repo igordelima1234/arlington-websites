@@ -1,7 +1,9 @@
 {
 	"name": "arlington-websites",
 	"compatibility_date": "2025-10-08",
-	"compatibility_flags": ["nodejs_compat"],
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
 	"main": "./dist/_worker.js/index.js",
 	"assets": {
 		"directory": "./dist",
@@ -10,5 +12,9 @@
 	"observability": {
 		"enabled": true
 	},
-	"upload_source_maps": true
+	"upload_source_maps": true,
+	"vars": {
+		"NOTIFY_TO": "igor@lhcreative.co",
+		"NOTIFY_FROM": "Arlington Websites <onboarding@resend.dev>"
+	}
 }

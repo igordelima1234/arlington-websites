@@ -1,0 +1,7 @@
+---
+/* Emits every color custom property (scales + light/dark semantic tokens) from src/colors.ts.
+   Put <ColorTokens /> in the <head> of any page or layout that uses brand.css. */
+import { tokensCSS } from "../colors";
+---
+
+<Fragment set:html={`<style>${tokensCSS()}</style>`} />

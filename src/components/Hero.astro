@@ -1,0 +1,724 @@
+---
+import Icon from './Icon.astro';
+import Eyebrow from './Eyebrow.astro';
+import { icons } from '../icons';
+
+const stars = [0, 1, 2, 3, 4];
+---
+
+<section class="hero">
+	<!-- Faint street map of downtown Arlington, TX (Abram/Center/Division/Cooper).
+	     Generated from OpenStreetMap data (© OpenStreetMap contributors, ODbL); credited in the footer. -->
+	<svg class="hero-map" aria-hidden="true" viewBox="0 0 900 842" preserveAspectRatio="xMidYMid slice">
+		<path class="m-park" d="M216.5 677.7L216.5 677.7ZM216.6 691.2L216.6 691.2ZM216.4 697.2L216.4 697.2ZM243.9 674.7L243.9 674.7ZM216.9 669.2L216.9 669.2ZM222.6 669.0L222.6 669.0ZM221.4 664.7L221.4 664.7ZM230.7 677.8L230.7 677.8ZM146.3 759.1L146.3 759.1ZM262.8 589.4L262.8 589.4ZM219.5 778.7L219.5 778.7ZM300.0 758.9L300.0 758.9ZM152.4 621.8L152.4 621.8ZM357.1 430.5L357.1 430.5ZM412.0 431.0L412.0 431.0ZM251.5 593.0L251.5 593.0ZM246.2 597.7L246.2 597.7ZM402.4 431.0L402.4 431.0ZM410.5 757.0L410.5 757.0ZM34.9 556.3L34.9 556.3ZM254.4 600.6L254.4 600.6ZM413.4 764.0L413.4 764.0ZM260.3 561.1L260.3 561.1ZM409.5 751.2L409.5 751.2ZM298.6 99.3L298.6 99.3ZM602.3 681.7L602.3 681.7ZM607.3 970.4L607.3 970.4ZM447.9 429.9L447.9 429.9ZM445.4 375.8L445.4 375.8ZM448.8 307.7L448.8 307.7ZM261.8 624.9L261.8 624.9ZM514.6 753.5L514.6 753.5ZM387.4 632.3L387.4 632.3ZM499.0 345.0L499.0 345.0ZM232.8 702.2L232.8 702.2ZM234.7 702.5L234.7 702.5Z" />
+		<path class="m-water" d="M501.2 1212.0L492.4 1203.2L486.8 1195.4L483.2 1185.7L485.3 1180.7L492.8 1175.4L497.5 1161.9L497.9 1136.3L501.4 1131.3L508.2 1125.2L511.2 1119.3L500.4 1112.9L487.4 1109.6L476.3 1100.8L474.3 1080.3L479.9 1065.4L476.9 1023.2L476.7 998.2L479.1 988.0L486.3 979.7L500.5 970.6L526.1 959.3L547.9 944.7L557.4 940.9L587.7 937.9L605.7 939.8L613.9 942.7L628.1 951.1L630.8 951.2L637.5 947.9L657.9 945.0L672.9 939.5L677.9 930.9L695.6 919.9L697.4 914.7L698.7 907.5L698.3 901.8L694.9 893.6L684.4 876.3L683.6 866.9L687.3 859.3L693.6 853.5L716.9 842.9L734.7 828.6L750.7 809.5L758.5 806.0L814.4 807.6L829.5 805.4L838.5 802.4L847.4 791.7L849.6 783.4L849.9 771.7L846.1 711.2L827.0 665.4L830.8 657.3L837.3 652.1L869.3 646.6L901.2 632.5L913.7 624.2L936.5 624.9L949.2 627.1L960.6 625.5L967.5 622.8L984.3 611.9L1006.8 603.3L1012.3 597.8L1036.8 544.3L1046.3 535.8L1049.2 528.4L1051.6 509.1L1055.9 494.7L1058.9 488.8L1091.8 464.4L1095.4 459.5L1102.3 456.0L1110.3 456.3L1126.8 461.1L1131.7 459.6L1137.6 455.5L1140.9 449.7L1143.1 441.6L1141.4 426.7L1134.1 401.5L1131.4 385.1L1130.4 365.4L1133.8 311.9L1132.9 287.8L1139.2 269.1L1153.2 247.0L1162.7 238.1L1195.7 221.0L1225.2 211.9L1242.1 198.5L1247.8 185.9L1245.7 172.1L1244.0 168.7L1236.8 134.6L1237.0 123.8L1239.2 114.1L1256.2 91.0L1257.8 82.7L1256.4 70.1L1238.5 25.3L1234.0 20.1L1227.9 16.9L1209.8 14.8L1202.6 11.9L1185.2 0.8L1183.6 -3.9L1186.9 -13.3L1195.7 -22.3L1214.7 -38.6L1262.7 -72.7L1270.0 -81.0L1271.1 -86.3L1270.1 -89.0L1265.4 -93.6L1260.4 -96.3L1240.8 -101.9L1235.9 -105.6L1234.5 -110.1L1238.4 -114.5L1267.1 -117.8L1272.6 -121.3L1272.6 -127.1L1270.0 -131.6L1266.8 -134.4L1245.1 -145.8L1241.9 -149.9L1240.9 -155.1L1242.9 -160.4L1247.2 -164.8L1279.7 -187.3L1283.0 -192.4L1280.7 -197.5L1268.4 -200.7L1247.6 -217.8L1240.0 -226.3L1236.6 -232.3L1210.8 -254.6L1202.9 -264.4L1200.1 -270.4L1199.1 -276.5L1200.3 -282.5L1202.2 -287.4L1211.3 -297.9L1220.2 -305.3L1240.3 -313.1L1287.6 -343.1L1332.6 -365.1L1364.0 -393.4L1394.8 -404.6L1427.2 -411.4L1464.3 -416.5M-5.8 505.8L-2.8 517.0L-0.7 533.7L1.8 542.6L3.8 545.4L4.1 553.0L13.3 567.7L34.9 581.3L39.0 589.4L38.5 596.6L39.8 598.8L40.3 605.9M66.2 655.6L65.9 660.1L63.3 664.6L64.8 677.8L81.6 690.1L87.3 702.0L99.9 713.9L111.0 717.7L121.7 725.7L123.4 729.6L125.3 744.8L131.3 761.1L136.0 768.6L144.3 773.7L154.0 773.6L174.4 784.2L178.0 784.2L195.2 778.9L199.1 781.3M199.1 781.3L215.8 789.0M312.9 828.0L331.2 837.4L335.2 842.1L352.2 849.0L355.4 846.6L357.0 841.9L365.1 837.5L375.9 841.2L379.8 844.9L388.8 859.7L391.8 861.4L404.2 862.9L408.2 866.0L411.2 879.1L415.1 882.9L424.5 884.9M-7.4 714.7L28.8 714.1L52.3 707.7L59.9 708.2L62.3 714.0L78.2 715.8L85.3 722.0L88.4 721.9L99.9 713.9M308.6 820.8L312.9 828.0M40.3 605.9L66.2 655.6M215.8 789.0L220.9 795.1L248.4 802.8L265.2 810.7L277.9 813.4L291.9 814.0L308.6 820.8M81.2 845.2L95.7 842.7L107.9 836.1L134.8 827.2L145.4 812.8L148.7 810.4L158.0 810.7L162.8 808.7L165.5 805.4L167.2 795.5L170.6 791.8L173.7 790.8L178.0 784.2M67.1 751.7L85.1 731.3M85.1 731.3L88.4 721.9M463.7 26.7L468.9 25.9L497.9 15.3M457.5 27.0L463.7 26.7M420.8 52.8L426.2 50.3L457.5 27.0M414.8 52.9L420.8 52.8M349.3 55.4L383.5 53.0L414.8 52.9M344.3 55.8L346.6 55.7M343.8 55.9L344.3 55.8M346.6 55.7L349.3 55.4M280.3 57.3L334.6 57.2L343.8 55.9M275.3 57.4L280.3 57.3M243.7 57.3L275.3 57.4" />
+		<path class="m-minor" d="M271.0 266.4L272.1 96.6M158.4 98.7L154.8 93.3L155.8 -89.8M870.1 311.0L1114.9 312.9M823.6 500.4L823.7 549.1M66.2 6.6L66.1 -62.9L66.7 -70.6L72.3 -79.6L75.1 -87.7L75.7 -146.5M101.8 269.0L100.4 225.9L102.2 219.0L99.3 136.0L100.1 105.9L101.4 97.6M418.4 2.5L232.0 1.2M137.3 652.8L137.7 717.1M342.3 757.5L298.1 756.3M489.0 547.3L655.6 553.2M389.0 587.5L431.2 588.5M452.4 373.4L468.8 359.1L473.9 357.3L496.9 358.7M158.9 221.7L100.4 225.9L12.0 226.6M739.0 328.9L742.9 322.6L743.4 281.5M546.7 718.9L575.7 718.8M582.4 713.5L652.2 715.4M706.1 -46.4L705.8 31.4M429.7 720.6L385.7 720.3M46.8 702.4L-10.7 707.7M638.4 334.2L669.5 335.1L690.6 327.5L695.0 327.2L739.0 328.9M93.3 487.9L93.6 465.9M751.0 78.3L805.0 78.0L805.5 103.2M588.7 431.5L587.2 444.4L584.3 514.2M583.1 550.0L580.9 639.6L582.4 713.5M-141.5 820.9L-78.6 821.1L-57.8 817.7L-39.9 824.9L51.2 826.6L58.3 825.2L67.7 816.9L69.7 812.8L70.1 766.4L68.7 756.4L60.6 747.4L56.1 745.0L20.4 738.5L5.1 738.9L-4.4 739.7L-26.9 747.1L-33.4 751.4L-38.7 758.1L-46.0 775.5L-57.8 817.7M332.1 321.4L332.9 265.9M498.2 328.6L358.2 322.9L311.3 320.2L295.6 317.8L235.2 315.6M208.5 488.5L144.6 487.4M680.5 776.9L674.7 787.2L670.4 799.3L669.0 827.2M361.0 228.6L213.5 227.3M801.1 428.3L801.0 526.5M190.2 98.8L190.8 0.6L192.8 -58.4L191.6 -68.3L183.0 -82.3L182.1 -89.4L182.1 -143.1L180.7 -145.5M496.9 678.0L581.4 678.7M581.2 671.0L653.1 672.9M429.9 676.5L386.1 676.1M347.2 514.3L345.6 520.9L344.3 563.2L345.5 570.1L350.1 577.0L350.1 583.6L348.2 586.3L343.9 588.1M332.9 265.9L333.9 97.1M742.9 469.3L743.0 496.8M863.5 658.4L878.5 656.7L903.1 662.2L920.1 661.7L955.3 663.8L962.0 663.5L982.2 658.6L987.7 658.7L991.8 660.4L995.3 663.9L996.5 673.6L993.1 678.7L980.9 685.7L961.9 709.4L958.0 712.1L949.8 713.8L928.9 713.3L924.6 715.1L909.4 728.3L902.2 731.1L864.5 734.0M395.7 512.8L395.6 520.2L387.9 536.3L387.7 584.4L389.0 587.5M590.9 331.9L597.5 182.0L605.2 48.1L604.8 35.2L608.8 -46.8M743.0 496.8L797.8 497.7L801.2 499.8L823.6 500.4L1035.8 502.4L1039.2 499.8L1039.8 493.8M586.7 801.8L649.7 802.0M60.9 364.6L60.6 420.0M638.4 334.2L652.5 -46.6M12.2 270.0L13.0 179.7L12.1 96.2M301.3 513.9L300.5 587.2M149.0 366.4L147.9 421.7M160.1 268.4L158.4 98.7M345.6 37.8L253.0 37.3M551.7 214.0L642.0 216.3L739.8 221.6L744.7 221.3L747.7 219.8M-141.3 767.6L-104.2 768.1L-85.9 763.5L-81.1 764.0L-55.7 773.8L-8.3 783.8L69.4 785.5M193.3 135.4L11.9 137.1M502.6 211.1L333.9 204.6M492.4 458.5L338.3 451.8L324.4 456.8L272.3 456.2M69.4 420.0L68.1 487.4M277.4 37.4L277.7 58.5M356.2 376.2L358.2 322.9M546.6 713.8L548.0 758.2M35.7 419.9L35.2 486.9M210.1 176.8L183.0 178.3L101.5 178.0L-44.3 181.7M107.4 75.8L109.1 -90.5M117.9 97.9L107.4 75.8M503.0 10.1L559.3 11.3M381.2 42.5L381.1 -35.5M450.4 326.6L455.0 195.4L453.2 183.9M747.7 219.8L749.8 214.9L749.3 157.5L750.8 104.7L751.3 -3.6L755.1 -137.3M738.4 281.3L739.8 221.6M517.4 813.1L473.1 812.7M487.4 624.0L581.3 626.0L654.2 630.1L863.8 629.4M750.8 104.7L866.0 101.1L1241.7 103.4M647.7 67.8L725.7 69.2L750.9 68.0M496.9 358.7L544.4 360.5M543.5 384.5L595.0 386.1M634.4 391.1L737.5 394.5M761.3 428.3L760.5 374.2M751.3 -3.6L793.4 -3.1L808.2 0.4L834.4 -0.2L867.4 1.5M361.0 228.6L360.9 198.1L356.9 165.9L358.4 120.5L357.8 100.5L352.6 75.0L348.1 62.6L345.1 45.4L345.3 -103.6M158.4 652.6L83.3 654.1L47.6 647.5L27.5 646.2M633.9 431.2L631.6 449.4L630.1 514.5M657.7 431.2L651.6 777.0L643.6 888.2M722.2 -46.2L720.5 -4.6L721.3 44.0M452.4 373.4L444.4 378.9L437.4 379.6L331.3 375.1M295.6 317.8L297.3 266.1M296.5 176.5L298.1 96.8M403.7 324.8L411.3 108.1L417.3 91.6L418.2 66.7L419.1 -231.4M492.4 458.5L706.1 468.1L801.3 469.5M472.3 769.1L473.1 812.7M502.6 54.1L604.7 56.9M706.0 431.8L706.1 468.1M702.7 393.3L702.2 428.4M272.5 422.7L271.8 513.4M334.1 176.8L210.1 176.8M866.3 569.5L993.6 570.8L995.8 569.7M342.3 757.5L342.6 675.6M386.1 676.1L385.7 720.3M385.7 720.3L342.9 719.4M385.7 720.3L384.6 810.7M341.4 818.6L342.3 757.5M473.1 812.7L469.9 812.2L467.1 813.5L465.4 820.2L473.1 821.2L472.2 849.9L470.9 854.2L458.0 867.0M468.2 856.9L465.5 849.7L465.4 820.2M331.3 375.1L90.7 364.2L-12.7 365.7L-133.0 365.6M738.9 847.6L757.6 834.5L768.9 829.9L803.9 829.4L811.5 833.5L815.4 839.0L814.6 869.9M360.3 190.4L394.7 191.3M798.7 526.4L797.6 561.7M823.7 549.1L823.7 565.1M399.5 427.7L395.7 512.8M144.6 487.4L132.1 486.8L122.0 488.5M142.2 495.0L138.5 509.1L137.3 652.8M123.2 420.9L122.0 488.5M444.4 378.9L446.4 384.1L445.2 425.4M488.1 589.5L431.2 588.5M302.6 423.4L301.3 513.9M342.6 675.6L386.1 676.1M107.4 75.8L101.4 97.6M188.6 755.5L144.1 755.3L138.8 751.8M606.0 11.3L609.7 14.1L650.0 14.5M144.6 487.4L142.2 495.0M727.7 781.9L725.9 796.3M-137.5 648.5L-131.9 650.4L-26.4 649.6L24.2 648.4L27.5 646.2M27.5 646.2L24.4 645.0L-86.6 646.2L-131.9 647.3L-137.5 648.5M206.8 755.5L188.6 755.5M644.7 152.1L651.7 151.9L665.4 148.5L678.7 143.2L685.0 143.1L686.1 114.2L741.1 114.2L745.4 117.3M749.4 171.5L677.1 171.4L676.7 154.1M729.9 153.8L732.9 145.1L733.1 137.7L730.5 134.6L702.7 130.5L685.1 129.7M676.7 154.1L709.6 155.9L729.9 153.8M733.0 144.5L709.5 145.1L685.0 143.1M556.2 97.5L646.6 96.6M459.9 99.4L461.5 -47.9M356.2 376.2L353.4 427.3M402.8 353.8L399.5 427.7M595.0 386.1L594.3 411.6L590.6 421.1L588.7 431.5M445.2 425.4L445.3 429.0M660.2 391.7L659.0 422.9L657.7 431.2M702.2 428.4L706.0 431.8M761.3 431.8L761.3 428.3M636.0 365.3L633.9 428.7M633.9 428.7L633.9 431.2M358.2 322.9L360.5 265.7M498.2 328.6L545.5 330.3M545.5 330.3L638.4 334.2M502.6 211.1L506.5 209.5L529.9 210.8M535.7 211.1L535.7 211.1M535.7 210.8L552.0 211.1M453.2 183.9L452.2 178.4L454.1 99.6M232.0 1.2L66.2 -0.6M360.5 265.7L361.0 228.6M381.7 229.6L361.0 228.6M353.4 427.3L350.3 491.7L347.2 514.3M137.7 717.1L136.3 720.4L137.5 734.8M137.5 734.8L138.8 751.8M137.5 734.8L138.8 730.5L137.7 717.1M256.6 755.8L206.8 755.5" />
+		<path class="m-mid" d="M395.7 512.8L368.1 514.2L281.3 513.7M656.3 514.8L672.5 515.4L696.6 521.7L716.0 525.0L866.8 527.6M502.4 97.6L556.2 97.5M517.9 758.1L506.4 758.6L487.0 762.6L472.3 769.1L443.5 785.3M884.0 762.7L927.4 761.5L946.2 766.7L952.8 770.5L967.1 788.8L975.6 796.1L1021.3 812.6L1088.8 851.5L1114.3 864.8L1135.4 870.9L1145.9 872.3L1163.6 872.9L1213.8 871.5L1258.8 853.9L1269.0 850.8L1281.3 849.0L1529.2 849.8L1540.6 851.3L1547.6 854.8L1596.1 902.8L1609.2 910.4L1795.1 915.8L1916.3 916.6L1929.9 915.2L1969.3 905.4L2018.4 888.2M-116.8 94.5L217.9 99.3M431.9 529.1L429.9 676.5M428.4 816.9L425.3 961.8L424.7 1088.2M154.6 822.3L143.1 830.0L127.3 845.6L111.5 857.2L95.5 864.6L76.9 867.9L-38.8 864.7L-123.9 864.3L-158.4 860.1L-241.2 860.4M122.0 488.5L-63.1 485.4M513.4 512.4L537.8 513.8M408.5 803.4L384.6 810.7L341.4 818.6M429.7 720.6L429.0 771.9M435.3 512.5L395.7 512.8M173.8 506.3L135.0 492.1L122.0 488.5M843.3 767.4L856.3 764.6M517.9 758.1L584.5 758.4M311.9 823.7L305.3 824.0M341.4 818.6L311.9 823.7M537.8 513.8L556.3 513.8M651.7 759.0L660.4 762.0L673.0 772.4L680.5 776.9L694.4 781.8L768.0 781.6L808.6 780.1L843.3 767.4M562.9 513.8L584.3 514.2M556.3 513.8L562.9 513.8M584.3 514.2L656.3 514.8M651.6 774.4L658.6 768.7L667.5 767.4M217.9 99.3L239.2 99.4L272.1 96.6L357.3 97.2L409.8 100.8L502.4 97.6M262.5 512.8L238.0 511.9M238.0 511.9L221.0 511.5M221.0 511.5L208.6 511.4M428.7 793.4L408.5 803.4M428.7 793.4L428.4 816.9M584.5 758.4L651.7 759.0M443.5 785.3L428.7 793.4M429.0 771.9L428.7 793.4M435.3 512.5L431.9 529.1M429.9 676.5L429.7 720.6M490.2 512.3L513.4 512.4M452.2 512.4L435.3 512.5M479.2 512.2L452.2 512.4M490.2 512.3L479.2 512.2M195.5 511.2L173.8 506.3M208.6 511.4L195.5 511.2M281.3 513.7L271.8 513.4M271.8 513.4L262.5 512.8M161.8 818.0L154.6 822.3M184.1 809.8L178.2 811.0L161.8 818.0M207.1 807.4L184.1 809.8M243.2 811.4L227.1 808.4M227.1 808.4L207.1 807.4M305.3 824.0L273.3 820.8L243.2 811.4M856.3 764.6L873.3 763.0M873.3 763.0L884.0 762.7" />
+		<path class="m-major" d="M868.4 380.7L870.7 378.3L870.9 367.1M212.4 369.6L216.2 338.9L215.8 293.7M216.3 267.6L209.4 267.4M549.4 273.1L559.3 36.3L559.0 -47.1L560.7 -138.1M205.7 369.2L204.3 403.7M868.7 354.0L868.6 352.3M493.5 430.4L489.0 547.3L487.7 633.5L491.4 658.4L517.1 750.8L517.3 845.0L521.2 858.8L532.3 881.1L549.6 908.0L568.9 928.5M651.4 277.5L793.3 283.0M232.6 267.5L360.5 265.7L501.2 270.7M868.1 432.2L880.9 432.0M207.8 426.2L210.7 422.1L211.0 383.8M866.8 275.1L866.0 258.6M217.9 99.3L230.2 61.8L232.5 38.6L232.2 15.3M209.4 267.4L210.0 325.7L207.7 356.9M867.7 798.7L867.1 868.0L864.8 905.2L862.8 981.7L862.8 1092.1M198.2 267.7L-68.1 271.4L-104.3 274.3M1128.1 432.5L868.1 428.3M825.9 280.7L847.5 278.2M904.2 264.9L886.4 270.2M504.6 -231.0L502.7 78.4M869.8 304.9L869.1 293.8M867.3 10.2L867.5 -9.0M211.1 99.2L205.1 122.7L203.5 135.1L203.4 161.7M232.2 15.3L232.0 1.2M210.0 194.2L210.1 176.8M216.1 276.2L216.3 267.6M209.1 253.0L209.4 267.4M207.7 356.9L205.7 369.2M203.4 161.7L203.4 177.1M224.7 -11.4L226.0 1.2M215.8 293.7L215.9 284.7M203.4 177.1L202.9 201.8L204.4 222.4L207.4 239.8M232.0 1.2L229.3 -33.7L229.0 -76.2M207.4 239.8L209.1 253.0M216.3 267.6L216.3 248.4L211.5 215.5L210.0 194.2M867.5 512.9L866.8 527.6M866.8 527.6L866.6 546.2M868.1 428.3L868.1 432.2M868.0 448.0L867.8 469.9M867.8 469.9L867.5 512.9M211.0 383.8L212.4 369.6M208.6 511.4L208.6 493.4M208.2 444.9L207.9 436.3M208.6 493.4L208.3 452.1M585.5 906.1L586.7 801.8L585.6 766.7L581.4 736.3L577.7 722.9L570.7 709.6L548.2 673.6L542.0 660.2L538.8 648.8L536.7 625.1L536.5 587.8L537.8 513.8M209.4 267.4L198.2 267.7M216.3 267.6L232.6 267.5M865.9 763.2L867.4 781.5M864.7 737.2L865.9 763.2M866.6 546.2L866.3 585.5L863.7 637.3M206.8 773.9L206.8 755.5M207.1 807.4L203.9 815.1M206.9 777.2L206.8 773.9M206.8 795.8L206.9 792.3M206.9 792.3L206.9 783.8M207.1 807.4L206.8 795.8M203.9 815.1L203.2 846.4M206.8 755.5L207.4 650.0M867.4 781.5L867.7 798.7M204.3 403.7L204.3 421.6L207.8 426.2M857.8 432.1L868.1 432.2M706.0 431.8L801.2 431.8M640.8 277.0L651.4 277.5M549.4 273.1L627.5 276.4M627.5 276.4L640.8 277.0M217.6 81.6L211.1 99.2M212.3 118.1L217.9 99.3M210.1 176.8L210.1 135.2L212.3 118.1M226.0 1.2L225.0 49.6L223.2 63.1L217.6 81.6M174.9 422.3L183.0 424.7M493.7 426.9L445.2 425.4M868.2 413.7L868.1 428.3M868.3 402.3L868.3 403.1M868.2 413.7L858.1 425.0L853.0 428.0M868.0 448.0L875.7 436.8L880.9 432.0M886.4 270.2L866.8 275.1M868.7 287.5L866.8 275.1M868.7 287.5L878.5 274.9L886.4 270.2M886.4 270.2L875.4 268.2L870.4 264.9L866.0 258.6M207.9 436.3L213.0 434.1L219.2 426.7M-135.3 419.4L60.6 420.0M208.6 526.5L208.6 535.9M208.6 511.4L208.6 526.5M195.5 511.2L208.6 526.5M207.4 650.0L208.3 568.0M863.6 654.3L864.7 737.2M863.7 637.3L863.6 654.3M857.8 432.1L862.2 436.9L868.0 448.0M882.9 428.5L874.4 422.4L868.2 413.7M866.0 258.6L860.6 268.0L847.5 278.2M92.6 420.1L123.2 420.9M147.9 421.7L123.2 420.9M76.8 420.0L92.6 420.1M69.4 420.0L60.6 420.0M69.4 420.0L76.8 420.0M847.5 278.2L866.8 275.1M866.0 258.6L865.6 139.2L867.3 10.2M847.5 278.2L853.2 279.5L868.7 287.5M209.1 253.0L207.4 257.5L203.7 261.7L193.2 267.8M215.9 284.7L219.8 275.5L226.5 269.7L232.6 267.5M208.6 526.5L221.0 511.5M230.4 99.6L224.7 92.6L222.7 86.3M868.7 354.0L865.6 357.0L865.4 366.9M865.4 366.9L865.4 378.2L868.4 380.7M868.4 380.7L868.4 381.7M870.9 367.1L871.2 356.8L868.7 354.0M240.7 422.5L204.3 421.6M188.6 755.5L198.9 761.5L206.8 773.9M227.1 808.4L216.1 800.5L211.4 792.6M202.8 792.8L197.7 803.0L188.0 809.3M206.9 783.8L202.8 792.8M211.4 792.6L206.9 783.8M206.9 783.8L206.9 777.2M537.8 513.8L541.8 431.9M209.6 853.9L210.0 815.0L207.1 807.4M215.9 284.7L216.1 276.2M272.5 422.7L251.7 422.4M302.6 423.4L284.6 422.9M353.5 424.5L335.3 424.0M174.9 422.3L147.9 421.7M204.3 421.6L180.1 420.1L174.9 422.3M207.8 426.2L219.2 426.7M196.1 425.6L207.9 436.3M196.1 425.6L207.8 426.2M399.7 425.0L372.2 424.9M353.4 427.3L386.5 427.7M541.9 428.8L511.1 427.6M541.9 428.8L543.5 384.5M589.3 428.7L560.2 428.9M445.2 425.4L411.6 425.1M541.8 431.9L574.0 431.6M541.8 431.9L541.9 428.8M828.1 431.8L842.3 431.9M801.2 431.8L828.1 431.8M588.7 431.5L621.2 431.3M633.9 428.7L601.9 428.7M702.2 428.4L671.4 428.5M493.5 430.4L523.6 431.3M496.9 358.7L493.5 430.4M851.3 432.0L857.8 432.1M842.3 431.9L851.3 432.0M868.1 428.3L817.9 428.2M817.9 428.2L801.1 428.3M801.1 428.3L785.8 428.3M785.8 428.3L761.3 428.3M761.3 428.3L741.5 428.4M741.5 428.4L717.4 428.4M717.4 428.4L702.2 428.4M657.7 431.2L690.6 431.9M690.6 431.9L706.0 431.8M671.4 428.5L657.9 428.5M644.5 431.2L657.7 431.2M657.9 428.5L641.0 428.6M641.0 428.6L633.9 428.7M633.9 431.2L644.5 431.2M621.2 431.3L633.9 431.2M601.9 428.7L589.3 428.7M574.0 431.6L588.7 431.5M560.2 428.9L541.9 428.8M523.6 431.3L541.8 431.9M511.1 427.6L493.7 426.9M475.2 429.7L493.5 430.4M450.4 428.8L475.2 429.7M431.4 428.6L445.3 429.0M411.6 425.1L399.7 425.0M399.5 427.7L431.4 428.6M386.5 427.7L399.5 427.7M372.2 424.9L353.5 424.5M331.5 426.9L349.0 427.2M302.6 426.8L331.5 426.9M335.3 424.0L313.8 423.6M313.8 423.6L302.6 423.4M284.6 422.9L272.5 422.7M284.0 426.3L302.6 426.8M251.7 422.4L240.7 422.5M183.0 424.7L196.1 425.6M868.1 432.2L868.0 448.0M880.9 432.0L1127.8 436.0M219.2 426.7L284.0 426.3M207.9 436.3L207.8 426.2M502.4 97.6L503.5 172.1L501.9 253.6M502.7 78.4L502.4 97.6M501.2 270.7L496.9 358.7M501.9 253.6L501.2 270.7M869.8 343.8L869.8 304.9M868.6 352.3L869.8 343.8M868.4 381.7L868.4 395.5M543.5 384.5L544.4 360.5M544.4 360.5L546.8 310.2M501.2 270.7L549.4 273.1M546.8 310.2L549.4 273.1M793.3 283.0L825.9 280.7M208.6 535.9L208.3 568.0M869.1 293.8L868.7 287.5M349.0 427.2L353.4 427.3M445.3 429.0L450.4 428.8M868.3 407.3L868.3 408.6M868.3 408.6L868.2 413.7M868.3 403.1L868.3 407.3M868.4 395.5L868.3 402.3M208.3 452.1L208.2 444.9" />
+		<path class="m-rail" d="M-1837.7 613.2L-1803.3 611.2L-1753.4 604.2L-1301.0 516.1L-1248.0 507.4L-695.7 463.2L-651.4 459.5L-615.1 454.3L-591.5 449.2L-563.9 441.3L-297.5 347.0L-259.2 336.0L-208.5 326.4L-168.7 322.7L-122.7 322.4L74.4 330.7L209.7 338.6L354.6 344.5M354.6 344.5L359.7 344.9M359.7 344.9L1046.9 374.7L1083.9 375.6L1122.9 373.5M-1837.6 615.1L-1803.0 613.1L-1753.0 605.8L-1317.5 521.0L-1254.2 510.2L-1172.5 502.6L-682.9 463.8L-621.0 457.7L-597.9 453.6L-560.9 443.7L-287.9 347.4L-244.6 336.1L-195.4 328.1L-160.4 325.6L-126.5 325.4L354.5 346.4M359.7 346.5L1046.8 376.5L1084.5 377.4L1123.1 375.4M354.5 346.4L359.7 346.5" />
+	</svg>
+	<div class="wrap hero-inner">
+		<div class="hero-copy">
+			<Eyebrow>Web design for small businesses</Eyebrow>
+			<h1 class="t-dxl">Websites designed to make your phone ring.</h1>
+			<p class="t-bl hero-sub">
+				Websites, local SEO and ads for small businesses, from a team down the street.
+			</p>
+			<div class="hero-ctas">
+				<a class="btn btn-primary" href="/audit"><span>Get a free audit</span><Icon name="arrow-right" /></a>
+				<a class="btn btn-secondary" href="#work"><span>See our work</span><Icon name="arrow-up-right" /></a>
+			</div>
+		</div>
+
+		<!--
+			Phone story, one 14s loop (all timings share --loop):
+			a mobile site for "Your business" gets built section by section.
+			Each section shows as a dashed, labeled outline, then fills in; the page
+			scrolls as it grows, the URL bar finishes loading, goes "Live", toast.
+			Base styles are the finished site, so reduced motion shows that still.
+		-->
+		<div class="stage" aria-hidden="true">
+			<div class="stage-inner">
+				<div class="phone">
+					<span class="side bs-action"></span>
+					<span class="side bs-up"></span>
+					<span class="side bs-down"></span>
+					<span class="side bs-power"></span>
+					<div class="screen">
+						<span class="island"></span>
+						<div class="statusbar">
+							<span class="clock">9:41</span>
+							<span class="sb-icons"><span class="signal"><i></i><i></i><i></i><i></i></span><span class="battery"></span></span>
+						</div>
+						<span class="home"></span>
+
+						<div class="browser">
+							<Icon name="website" size={14} />
+							<span class="url">yourbusiness.com</span>
+							<span class="live"><i></i>Live</span>
+							<span class="progress"></span>
+						</div>
+
+						<div class="viewport">
+							<div class="site">
+								<div class="sec s1 s-nav" data-label="Nav">
+									<div class="in">
+										<span class="brand"><Icon name="storefront" size={16} />Your business</span>
+										<span class="burger"><i></i><i></i><i></i></span>
+									</div>
+								</div>
+								<div class="sec s2 s-hero" data-label="Hero">
+									<div class="in">
+										<strong class="h">Fresh tacos, made daily.</strong>
+										<span class="ln"></span>
+										<span class="ln ln-s"></span>
+										<span class="ctas">
+											<span class="b-solid"><Icon name="phone" size={12} />Call now</span>
+											<span class="b-line">Menu</span>
+										</span>
+									</div>
+								</div>
+								<div class="sec s3 s-img" data-label="Photo">
+									<div class="in"><Icon name="camera" size={22} /></div>
+								</div>
+								<div class="sec s4 s-cards" data-label="Services">
+									<div class="in">
+										<span class="kicker">What we serve</span>
+										<span class="cards">
+											{[0, 1, 2].map(() => <span class="card"><b></b><i></i><i class="s"></i></span>)}
+										</span>
+									</div>
+								</div>
+								<div class="sec s5 s-reviews" data-label="Reviews">
+									<div class="in">
+										<span class="mini-stars">
+											{stars.map(() => <svg viewBox="0 0 24 24" set:html={icons.star} />)}
+										</span>
+										<span class="ln"></span>
+										<span class="ln ln-s"></span>
+										<span class="who">4.9 · 120 Google reviews</span>
+									</div>
+								</div>
+								<div class="sec s6 s-visit" data-label="Visit">
+									<div class="in">
+										<span class="mini-map">
+											<svg viewBox="0 0 230 84" preserveAspectRatio="none">
+												<path d="M0 26h230M0 62h230M64 0v84M160 0v84M0 84 96 0" />
+											</svg>
+											<span class="mm-pin"><Icon name="map-pin" size={22} /></span>
+										</span>
+										<span class="hours"><Icon name="clock" size={12} />Open today, 11 to 9</span>
+									</div>
+								</div>
+								<div class="sec s7 s-foot" data-label="Footer">
+									<div class="in"><span class="ln"></span><span class="ln ln-s"></span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="toast">
+					<Icon name="check" size={16} />
+					<span><strong>Your site</strong> is live</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	// Status bar clock: the visitor's local time, phone-style (no AM/PM).
+	const clock = document.querySelector<HTMLElement>('.stage .clock');
+	if (clock) {
+		const tick = () => {
+			const now = new Date();
+			const h = now.getHours() % 12 || 12;
+			clock.textContent = `${h}:${String(now.getMinutes()).padStart(2, '0')}`;
+			// Re-run right as the next minute starts
+			setTimeout(tick, 60_000 - (now.getSeconds() * 1000 + now.getMilliseconds()));
+		};
+		tick();
+	}
+
+	// Pause the loop while it's off-screen.
+	const stage = document.querySelector<HTMLElement>('.stage');
+	if (stage && 'IntersectionObserver' in window) {
+		new IntersectionObserver(([entry]) => {
+			stage.classList.toggle('paused', !entry.isIntersecting);
+		}).observe(stage);
+	}
+</script>
+
+<style>
+	.hero {
+		padding-block: var(--s-7) var(--s-8);
+		overflow-x: clip;
+	}
+	.hero-inner {
+		display: grid;
+		gap: var(--s-8);
+		align-items: center;
+	}
+	.hero-copy {
+		display: grid;
+		gap: var(--s-5);
+		justify-items: start;
+	}
+	.t-dxl { max-width: 15ch; }
+	@media (min-width: 1024px) {
+		/* Sized so the headline stays on three lines beside the phone (up to 84px) */
+		.t-dxl { font-size: clamp(3.5rem, 1rem + 4.75vw, 5.25rem); line-height: 0.96; }
+	}
+	.hero-sub {
+		max-width: 30rem;
+		color: var(--text-secondary);
+	}
+	.hero-ctas {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-3);
+		margin-top: var(--s-1);
+	}
+
+	/* ---------- Background map ---------- */
+	.hero { position: relative; }
+	.hero-inner { position: relative; z-index: 1; }
+	.hero-map {
+		position: absolute;
+		inset: auto 0 0 0;
+		width: 100%;
+		height: 62%;
+		color: var(--text-primary);
+		pointer-events: none;
+		/* Fade up toward the copy on small screens */
+		-webkit-mask-image: linear-gradient(to bottom, transparent, #000 45%);
+		mask-image: linear-gradient(to bottom, transparent, #000 45%);
+	}
+	.hero-map path {
+		fill: none;
+		stroke: currentColor;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.m-minor { stroke-width: 2.5; opacity: 0.07; }
+	.m-mid { stroke-width: 4; opacity: 0.07; }
+	.m-major { stroke-width: 6; opacity: 0.06; }
+	.m-rail { stroke-width: 1.5; opacity: 0.14; stroke-dasharray: 6 4; }
+	.m-water { stroke-width: 2; opacity: 0.12; stroke-dasharray: 1 5; }
+	.m-park { stroke-width: 1.2; opacity: 0.1; stroke-dasharray: 3 4; }
+	@media (min-width: 1024px) {
+		.hero-map {
+			inset: 0 0 0 auto;
+			width: 62%;
+			height: 100%;
+			/* Fade left into the blank side, and soften top and bottom */
+			-webkit-mask-image:
+				linear-gradient(to right, transparent, #000 55%),
+				linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+			-webkit-mask-composite: source-in;
+			mask-image:
+				linear-gradient(to right, transparent, #000 55%),
+				linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+			mask-composite: intersect;
+		}
+	}
+
+	/* ---------- Stage ---------- */
+	.stage {
+		--loop: 14s;
+		--ink: var(--text-primary);
+		--faint: color-mix(in srgb, var(--ink) 18%, transparent);
+		display: grid;
+		place-items: center;
+		color: var(--ink);
+		animation: stage-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+	}
+	@keyframes stage-in {
+		from { opacity: 0; transform: translateY(20px); }
+	}
+	.stage.paused :global(*) { animation-play-state: paused !important; }
+	.stage-inner {
+		position: relative;
+		width: 276px;
+	}
+
+	/* Device: solid body, concentric corners (outer 46 = inner 36 + 10 bezel) */
+	.phone {
+		position: relative;
+		padding: 10px;
+		border-radius: 46px;
+		background: var(--ink);
+		box-shadow:
+			0 50px 60px -40px color-mix(in srgb, var(--ink) 55%, transparent),
+			inset 0 0 0 1.5px color-mix(in srgb, white 16%, transparent);
+	}
+	.side {
+		position: absolute;
+		width: 3px;
+		border-radius: 2px;
+		background: var(--ink);
+	}
+	.bs-action { left: -3px; top: 104px; height: 26px; }
+	.bs-up { left: -3px; top: 150px; height: 50px; }
+	.bs-down { left: -3px; top: 210px; height: 50px; }
+	.bs-power { right: -3px; top: 170px; height: 78px; }
+
+	.screen {
+		position: relative;
+		height: 560px;
+		padding: 54px 14px 28px;
+		border-radius: 36px;
+		background: var(--bg-surface);
+		overflow: hidden;
+		font-family: var(--font-body);
+	}
+	.island {
+		position: absolute;
+		z-index: 3;
+		top: 11px;
+		left: 50%;
+		width: 88px;
+		height: 26px;
+		margin-left: -44px;
+		border-radius: 999px;
+		background: var(--ink);
+	}
+	.statusbar {
+		position: absolute;
+		z-index: 3;
+		top: 14px;
+		left: 28px;
+		right: 22px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 20px;
+		font-size: 13px;
+		font-weight: 600;
+	}
+	.sb-icons { display: flex; align-items: center; gap: 5px; }
+	.signal { display: flex; align-items: flex-end; gap: 1.5px; height: 10px; }
+	.signal i { width: 3px; border-radius: 1px; background: var(--ink); }
+	.signal i:nth-child(1) { height: 4px; }
+	.signal i:nth-child(2) { height: 6px; }
+	.signal i:nth-child(3) { height: 8px; }
+	.signal i:nth-child(4) { height: 10px; }
+	.battery {
+		position: relative;
+		width: 22px;
+		height: 11px;
+		border: 1.5px solid color-mix(in srgb, var(--ink) 45%, transparent);
+		border-radius: 3.5px;
+	}
+	.battery::before {
+		content: '';
+		position: absolute;
+		inset: 1.5px 5px 1.5px 1.5px;
+		border-radius: 1.5px;
+		background: var(--ink);
+	}
+	.battery::after {
+		content: '';
+		position: absolute;
+		right: -4px;
+		top: 2.5px;
+		width: 1.5px;
+		height: 3.5px;
+		border-radius: 0 1px 1px 0;
+		background: color-mix(in srgb, var(--ink) 45%, transparent);
+	}
+	.home {
+		position: absolute;
+		z-index: 3;
+		bottom: 8px;
+		left: 50%;
+		width: 104px;
+		height: 4px;
+		margin-left: -52px;
+		border-radius: 2px;
+		background: var(--ink);
+	}
+
+	/* URL bar: loads while the site builds, then goes Live */
+	.browser {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		height: 36px;
+		padding: 0 6px 0 12px;
+		border: 1.5px solid var(--ink);
+		border-radius: 999px;
+		overflow: hidden;
+	}
+	.browser :global(.icon) { flex: none; }
+	.url {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		white-space: nowrap;
+	}
+	.live {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		margin-left: auto;
+		height: 22px;
+		padding: 0 8px;
+		border-radius: 999px;
+		background: var(--ink);
+		color: var(--bg-surface);
+		font-size: 10px;
+		font-weight: 600;
+		animation: live var(--loop) ease infinite;
+	}
+	.live i {
+		width: 5px;
+		height: 5px;
+		border-radius: 50%;
+		background: var(--bg-surface);
+	}
+	@keyframes live {
+		0%, 66% { opacity: 0; transform: scale(0.8); }
+		69%, 91% { opacity: 1; transform: none; }
+		95%, 100% { opacity: 0; transform: none; }
+	}
+	.progress {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: 3px;
+		background: var(--ink);
+		transform-origin: left;
+		opacity: 0;
+		animation: progress var(--loop) ease-in-out infinite;
+	}
+	@keyframes progress {
+		0%, 3% { opacity: 1; transform: scaleX(0); }
+		10% { transform: scaleX(0.18); }
+		24% { transform: scaleX(0.4); }
+		40% { transform: scaleX(0.62); }
+		56% { transform: scaleX(0.84); }
+		65% { opacity: 1; transform: scaleX(1); }
+		68%, 100% { opacity: 0; transform: scaleX(1); }
+	}
+
+	/* The site being built */
+	.viewport {
+		--vh: 424px;
+		height: var(--vh);
+		margin-top: 10px;
+		overflow: hidden;
+	}
+	.site {
+		display: grid;
+		gap: 6px;
+		animation: scroll var(--loop) cubic-bezier(0.6, 0, 0.3, 1) infinite;
+	}
+	/* Scrolls down as sections are added, back to the top once it's live */
+	@keyframes scroll {
+		0%, 35% { transform: none; }
+		40%, 45% { transform: translateY(-110px); }
+		50%, 72% { transform: translateY(calc(var(--vh) - 100%)); }
+		80%, 100% { transform: none; }
+	}
+
+	.sec {
+		position: relative;
+		padding: 9px;
+	}
+	/* Builder outline + label, shown while a section is being created */
+	.sec::before,
+	.sec::after {
+		position: absolute;
+		opacity: 0;
+		animation-duration: var(--loop);
+		animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+		animation-iteration-count: infinite;
+		pointer-events: none;
+	}
+	.sec::before {
+		content: '';
+		inset: 0;
+		border: 1.5px dashed var(--ink);
+		border-radius: 12px;
+	}
+	.sec::after {
+		content: attr(data-label);
+		top: -1px;
+		right: 8px;
+		padding: 2px 6px;
+		border-radius: 0 0 6px 6px;
+		background: var(--ink);
+		color: var(--bg-surface);
+		font-family: var(--font-mono);
+		font-size: 8px;
+		letter-spacing: 0.08em;
+		line-height: 1.2;
+		text-transform: uppercase;
+	}
+	.sec > .in {
+		animation-duration: var(--loop);
+		animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+		animation-iteration-count: infinite;
+	}
+	.s1::before, .s1::after { animation-name: ob-1; }
+	.s1 > .in { animation-name: cb-1; }
+	@keyframes ob-1 {
+		0%, 5% { opacity: 0; transform: scale(0.96); }
+		7%, 11% { opacity: 1; transform: none; }
+		14%, 100% { opacity: 0; transform: none; }
+	}
+	@keyframes cb-1 {
+		0%, 8% { opacity: 0; transform: translateY(6px); }
+		11%, 91% { opacity: 1; transform: none; }
+		95%, 100% { opacity: 0; transform: none; }
+	}
+	.s2::before, .s2::after { animation-name: ob-2; }
+	.s2 > .in { animation-name: cb-2; }
+	@keyframes ob-2 {
+		0%, 12% { opacity: 0; transform: scale(0.96); }
+		14%, 18% { opacity: 1; transform: none; }
+		21%, 100% { opacity: 0; transform: none; }
+	}
+	@keyframes cb-2 {
+		0%, 15% { opacity: 0; transform: translateY(6px); }
+		18%, 91% { opacity: 1; transform: none; }
+		95%, 100% { opacity: 0; transform: none; }
+	}
+	.s3::before, .s3::after { animation-name: ob-3; }
+	.s3 > .in { animation-name: cb-3; }
+	@keyframes ob-3 {
+		0%, 20% { opacity: 0; transform: scale(0.96); }
+		22%, 26% { opacity: 1; transform: none; }
+		29%, 100% { opacity: 0; transform: none; }
+	}
+	@keyframes cb-3 {
+		0%, 23% { opacity: 0; transform: translateY(6px); }
+		26%, 91% { opacity: 1; transform: none; }
+		95%, 100% { opacity: 0; transform: none; }
+	}
+	.s4::before, .s4::after { animation-name: ob-4; }
+	.s4 > .in { animation-name: cb-4; }
+	@keyframes ob-4 {
+		0%, 28% { opacity: 0; transform: scale(0.96); }
+		30%, 34% { opacity: 1; transform: none; }
+		37%, 100% { opacity: 0; transform: none; }
+	}
+	@keyframes cb-4 {
+		0%, 31% { opacity: 0; transform: translateY(6px); }
+		34%, 91% { opacity: 1; transform: none; }
+		95%, 100% { opacity: 0; transform: none; }
+	}
+	.s5::before, .s5::after { animation-name: ob-5; }
+	.s5 > .in { animation-name: cb-5; }
+	@keyframes ob-5 {
+		0%, 41% { opacity: 0; transform: scale(0.96); }
+		43%, 47% { opacity: 1; transform: none; }
+		50%, 100% { opacity: 0; transform: none; }
+	}
+	@keyframes cb-5 {
+		0%, 44% { opacity: 0; transform: translateY(6px); }
+		47%, 91% { opacity: 1; transform: none; }
+		95%, 100% { opacity: 0; transform: none; }
+	}
+	.s6::before, .s6::after { animation-name: ob-6; }
+	.s6 > .in { animation-name: cb-6; }
+	@keyframes ob-6 {
+		0%, 48% { opacity: 0; transform: scale(0.96); }
+		50%, 54% { opacity: 1; transform: none; }
+		57%, 100% { opacity: 0; transform: none; }
+	}
+	@keyframes cb-6 {
+		0%, 51% { opacity: 0; transform: translateY(6px); }
+		54%, 91% { opacity: 1; transform: none; }
+		95%, 100% { opacity: 0; transform: none; }
+	}
+	.s7::before, .s7::after { animation-name: ob-7; }
+	.s7 > .in { animation-name: cb-7; }
+	@keyframes ob-7 {
+		0%, 56% { opacity: 0; transform: scale(0.96); }
+		58%, 62% { opacity: 1; transform: none; }
+		65%, 100% { opacity: 0; transform: none; }
+	}
+	@keyframes cb-7 {
+		0%, 59% { opacity: 0; transform: translateY(6px); }
+		62%, 91% { opacity: 1; transform: none; }
+		95%, 100% { opacity: 0; transform: none; }
+	}
+
+	/* Shared text lines */
+	.ln {
+		display: block;
+		width: 92%;
+		height: 6px;
+		border-radius: 3px;
+		background: var(--faint);
+	}
+	.ln-s { width: 62%; }
+
+	.s-nav .in {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-family: var(--font-display);
+		font-size: 13px;
+		font-weight: 700;
+	}
+	.burger { display: grid; gap: 3px; }
+	.burger i { width: 14px; height: 2px; border-radius: 1px; background: var(--ink); }
+
+	.s-hero .in { display: grid; gap: 7px; }
+	.h {
+		font-family: var(--font-display);
+		font-size: 23px;
+		font-weight: 800;
+		line-height: 1.02;
+		letter-spacing: -0.02em;
+		margin-bottom: 2px;
+	}
+	.ctas { display: flex; gap: 6px; margin-top: 4px; }
+	.b-solid,
+	.b-line {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		height: 28px;
+		padding: 0 12px;
+		border-radius: 999px;
+		font-size: 11px;
+		font-weight: 600;
+	}
+	.b-solid { background: var(--ink); color: var(--bg-surface); }
+	.b-line { border: 1.5px solid var(--ink); }
+
+	.s-img .in {
+		display: grid;
+		place-items: center;
+		height: 88px;
+		border: 1.5px solid var(--ink);
+		border-radius: 12px;
+		background: repeating-linear-gradient(135deg, transparent 0 9px, var(--faint) 9px 10px);
+	}
+	.s-img :global(.icon) {
+		padding: 6px;
+		box-sizing: content-box;
+		border-radius: 8px;
+		background: var(--bg-surface);
+	}
+
+	.s-cards .in { display: grid; gap: 7px; }
+	.kicker {
+		font-family: var(--font-mono);
+		font-size: 9px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+	.card {
+		display: grid;
+		align-content: space-between;
+		gap: 4px;
+		height: 60px;
+		padding: 7px;
+		border: 1.5px solid var(--ink);
+		border-radius: 10px;
+	}
+	.card b {
+		width: 16px;
+		height: 16px;
+		border: 1.5px solid var(--ink);
+		border-radius: 50%;
+	}
+	.card i { display: block; height: 5px; border-radius: 3px; background: var(--faint); }
+	.card i.s { width: 60%; margin-top: -8px; }
+
+	.s-reviews .in {
+		display: grid;
+		gap: 6px;
+		padding: 10px;
+		border: 1.5px solid var(--ink);
+		border-radius: 12px;
+	}
+	.mini-stars { display: flex; gap: 2px; }
+	.mini-stars svg {
+		width: 12px;
+		height: 12px;
+		fill: var(--ink);
+		stroke: var(--ink);
+	}
+	.who { font-size: 10px; color: var(--text-secondary); }
+
+	.mini-map {
+		position: relative;
+		display: block;
+		height: 84px;
+		border: 1.5px solid var(--ink);
+		border-radius: 12px;
+		overflow: hidden;
+	}
+	.mini-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+	.mini-map path { fill: none; stroke: var(--faint); stroke-width: 7; }
+	.mm-pin {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -80%);
+		color: var(--ink);
+	}
+	.hours {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		margin-top: 8px;
+		font-size: 11px;
+		font-weight: 600;
+	}
+
+	.s-foot .in {
+		display: grid;
+		gap: 6px;
+		padding: 12px;
+		border-radius: 10px;
+		background: var(--ink);
+	}
+	.s-foot .ln { background: color-mix(in srgb, var(--bg-surface) 30%, transparent); }
+
+	/* Launch confirmation */
+	.toast {
+		position: absolute;
+		right: -12px;
+		bottom: 64px;
+		z-index: 2;
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 16px;
+		border-radius: var(--radius-m);
+		background: var(--ink);
+		color: var(--bg-surface);
+		font-size: 14px;
+		white-space: nowrap;
+		box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--ink) 50%, transparent);
+		opacity: 0;
+		animation: toast var(--loop) cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+	}
+	@keyframes toast {
+		0%, 70% { opacity: 0; transform: translateX(-12px); }
+		74%, 89% { opacity: 1; transform: none; }
+		93%, 100% { opacity: 0; transform: none; }
+	}
+
+	@media (min-width: 1024px) {
+		.hero { padding-block: var(--s-9); }
+		.hero-inner { grid-template-columns: 1.25fr 1fr; }
+		.stage-inner { width: 288px; }
+		.toast { right: -40px; }
+	}
+</style>

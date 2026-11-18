@@ -1,0 +1,857 @@
+---
+/*
+  /new-website: step-by-step project intake ("I need a website" in the Start here menu).
+  One or two questions per screen, Typeform style. Questions live in `steps` below.
+  Submissions go to NEW_SITE_FORM_ENDPOINT (src/consts.ts) when set,
+  otherwise the visitor's email app opens with the answers pre-filled.
+
+  Keyboard: Enter continues; A, B, C… pick an option when a screen has one choice question.
+*/
+import '../styles/brand.css';
+import '../styles/site.css';
+import ColorTokens from '../components/ColorTokens.astro';
+import SiteNav from '../components/SiteNav.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import Icon from '../components/Icon.astro';
+import type { IconName } from '../icons';
+import { SITE_TITLE, CONTACT, NEW_SITE_FORM_ENDPOINT } from '../consts';
+
+type Option = { label: string; icon?: IconName; exclusive?: boolean };
+type Question =
+	| { type: 'text' | 'email' | 'tel'; name: string; label: string; placeholder?: string; autocomplete?: string; required?: boolean }
+	| { type: 'single' | 'multi'; name: string; label: string; hint?: string; options: Option[]; required?: boolean };
+type TextQuestion = Extract<Question, { type: 'text' | 'email' | 'tel' }>;
+type Step = { id: string; title?: string; questions: Question[] };
+
+const steps: Step[] = [
+	{
+		id: 'business',
+		questions: [
+			{ type: 'text', name: 'business', label: 'What’s your business called?', placeholder: 'e.g. Lone Star Plumbing', autocomplete: 'organization', required: true },
+			{
+				type: 'single',
+				name: 'industry',
+				label: 'What kind of business is it?',
+				required: true,
+				options: [
+					{ label: 'Home services or trades' },
+					{ label: 'Restaurant or food' },
+					{ label: 'Health, beauty or fitness' },
+					{ label: 'Professional services' },
+					{ label: 'Shop or retail' },
+					{ label: 'Something else' },
+				],
+			},
+		],
+	},
+	{
+		id: 'goals',
+		questions: [
+			{
+				type: 'multi',
+				name: 'goals',
+				label: 'What should your new website do for you?',
+				hint: 'Pick as many as you like.',
+				required: true,
+				options: [
+					{ label: 'Get more phone calls', icon: 'phone' },
+					{ label: 'Let customers book online', icon: 'calendar' },
+					{ label: 'Show off our work', icon: 'camera' },
+					{ label: 'Sell products online', icon: 'storefront' },
+					{ label: 'Look more professional', icon: 'star' },
+				],
+			},
+		],
+	},
+	{
+		id: 'assets',
+		questions: [
+			{
+				type: 'multi',
+				name: 'has',
+				label: 'What do you already have?',
+				hint: 'None of these? No problem. We can help with all of them.',
+				required: true,
+				options: [
+					{ label: 'A logo', icon: 'pen' },
+					{ label: 'Photos of our work or team', icon: 'camera' },
+					{ label: 'A domain name', icon: 'website' },
+					{ label: 'Text written for the site', icon: 'document' },
+					{ label: 'None of these yet', icon: 'plus', exclusive: true },
+				],
+			},
+		],
+	},
+	{
+		id: 'timing',
+		questions: [
+			{
+				type: 'single',
+				name: 'timeline',
+				label: 'When would you like to launch?',
+				required: true,
+				options: [{ label: 'As soon as possible' }, { label: 'In the next 1–3 months' }, { label: 'Later this year' }, { label: 'Just exploring' }],
+			},
+		],
+	},
+	{
+		id: 'contact',
+		title: 'Last step. Who should we talk to?',
+		questions: [
+			{ type: 'text', name: 'name', label: 'Your name', autocomplete: 'name', required: true },
+			{ type: 'email', name: 'email', label: 'Email', autocomplete: 'email', placeholder: 'you@yourbusiness.com', required: true },
+			{ type: 'tel', name: 'phone', label: 'Phone', autocomplete: 'tel', placeholder: 'Only if you’d rather we call' },
+		],
+	},
+];
+
+const total = steps.length;
+const KEYS = 'ABCDEFGHIJ';
+
+const next = [
+	{ icon: 'chat', title: 'We read your answers', note: 'A real person here in Arlington looks over what you sent, usually within one business day.' },
+	{ icon: 'phone', title: 'A quick, no-pressure call', note: 'About 20 minutes to learn about your business and answer your questions. No sales script.' },
+	{ icon: 'document', title: 'A clear plan and price', note: 'You get a written proposal with what we’ll build, a fixed price and a timeline. No surprises.' },
+	{ icon: 'website', title: 'We design, build and launch', note: 'You review every page before it goes live. We handle the tech, hosting and setup.' },
+] as const;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Plan Your New Website · {SITE_TITLE}</title>
+		<meta name="description" content="Answer a few quick questions about your business and we’ll put together a plan and a fixed price for your new website." />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+		<ColorTokens />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<SiteNav />
+
+		<main id="main" class="flow" data-flow data-endpoint={NEW_SITE_FORM_ENDPOINT} data-to={CONTACT.email}>
+			<!-- Progress: hidden on the intro and the final screen -->
+			<div class="topline" data-topline hidden>
+				<div class="wrap topline-inner">
+					<button class="back" type="button" data-back>
+						<Icon name="arrow-left" size={20} /><span>Back</span>
+					</button>
+					<p class="t-label count" aria-live="polite"><span data-count>1</span> of {total}</p>
+				</div>
+				<div class="bar" aria-hidden="true"><span data-bar></span></div>
+			</div>
+
+			<div class="wrap stage">
+				<!-- Intro -->
+				<section class="screen intro" data-screen="intro">
+					<Eyebrow>New website</Eyebrow>
+					<h1 class="t-h1" tabindex="-1" data-heading>Let’s plan your new website.</h1>
+					<p class="t-bl lede">
+						Answer {total} quick questions about your business. We’ll use them to put together a plan and a clear, fixed price.
+					</p>
+					<div class="actions">
+						<button class="btn btn-primary go" type="button" data-start-flow>
+							<span>Let’s go</span><Icon name="arrow-right" />
+						</button>
+						<span class="t-small hint"><Icon name="clock" size={16} /> Takes about 2 minutes</span>
+					</div>
+				</section>
+
+				<!-- Questions -->
+				<form class="steps" data-form novalidate>
+					{steps.map((step, si) => {
+						const choiceQs = step.questions.filter((q) => q.type === 'single' || q.type === 'multi');
+						const solo = step.questions.length === 1 && choiceQs.length === 1;
+						return (
+							<section
+								class="screen step"
+								data-screen={step.id}
+								data-step={si}
+								data-keys={choiceQs.length === 1 ? choiceQs[0].name : undefined}
+								data-auto={solo && choiceQs[0].type === 'single' ? '' : undefined}
+								hidden
+							>
+								{step.title && <h2 class="t-h2 step-title" tabindex="-1" data-heading>{step.title}</h2>}
+
+								<div class="questions">
+									{step.questions.map((q, qi) => {
+										const id = `q-${q.name}`;
+										const headingProps = !step.title && qi === 0 ? { tabindex: '-1', 'data-heading': '' } : {};
+										if (q.type === 'single' || q.type === 'multi') {
+											return (
+												<fieldset class="q" data-q={q.name} data-required={q.required ? '' : undefined} data-kind={q.type}>
+													<legend class="q-label">
+														<span class="t-h2" {...headingProps}>{q.label}</span>
+														{q.hint && <span class="q-hint">{q.hint}</span>}
+													</legend>
+													<div class:list={['choices', { 'two-col': q.options.length > 4 }]}>
+														{q.options.map((o, oi) => (
+															<label class="choice">
+																<input
+																	type={q.type === 'single' ? 'radio' : 'checkbox'}
+																	name={q.name}
+																	value={o.label}
+																	data-exclusive={o.exclusive ? '' : undefined}
+																/>
+																<span class="choice-box">
+																	<span class="key" aria-hidden="true">
+																		<span class="key-letter">{KEYS[oi]}</span>
+																		<Icon name="check" size={16} class="key-check" />
+																	</span>
+																	{o.icon && <Icon name={o.icon} size={20} class="choice-icon" />}
+																	<span class="choice-label">{o.label}</span>
+																</span>
+															</label>
+														))}
+													</div>
+													<p class="msg" id={`${id}-msg`} aria-live="polite"></p>
+												</fieldset>
+											);
+										}
+										const t = q as TextQuestion;
+										return (
+											<div class="q" data-q={q.name} data-required={q.required ? '' : undefined} data-kind={q.type}>
+												<label class="q-label" for={id}>
+													<span class:list={[step.title ? 'field-label' : 't-h2']} {...headingProps}>
+														{q.label}
+														{!q.required && step.title && <span class="opt">Optional</span>}
+													</span>
+												</label>
+												<input
+													class:list={['text', { big: !step.title }]}
+													id={id}
+													name={q.name}
+													type={q.type}
+													inputmode={q.type === 'tel' ? 'tel' : q.type === 'email' ? 'email' : undefined}
+													autocomplete={t.autocomplete}
+													placeholder={t.placeholder}
+													aria-describedby={`${id}-msg`}
+												/>
+												<p class="msg" id={`${id}-msg`} aria-live="polite"></p>
+											</div>
+										);
+									})}
+								</div>
+
+								<div class="actions">
+									{si === total - 1 ? (
+										<button class="btn btn-primary go" type="submit">
+											<span data-submit-label>Send my answers</span><Icon name="arrow-right" />
+										</button>
+									) : (
+										<button class="btn btn-primary go" type="button" data-next>
+											<span>Continue</span><Icon name="arrow-right" />
+										</button>
+									)}
+									<span class="t-small hint enter-hint">
+										press <kbd>Enter ↵</kbd>
+									</span>
+								</div>
+								{si === total - 1 && (
+									<>
+										<p class="t-small fine">We’ll only use your details to talk about your project. No spam, ever.</p>
+										<p class="form-error" role="alert" data-form-error></p>
+									</>
+								)}
+							</section>
+						);
+					})}
+
+					<!-- Spam trap: hidden from people, bots fill it in -->
+					<input class="trap" type="text" name="company_site" tabindex="-1" autocomplete="off" aria-hidden="true" />
+				</form>
+
+				<!-- Exit: what happens next -->
+				<section class="screen done" data-screen="done" hidden>
+					<span class="done-mark"><Icon name="check" size={32} /></span>
+					<h1 class="t-h1" tabindex="-1" data-heading data-done-title>Thanks. We’ve got your answers.</h1>
+					<p class="t-bl lede" data-done-text></p>
+
+					<h2 class="t-label next-label">What happens next</h2>
+					<ol class="next">
+						{next.map((n, i) => (
+							<li>
+								<span class="next-num" aria-hidden="true">{i + 1}</span>
+								<span class="spot"><Icon name={n.icon} size={24} /></span>
+								<span class="next-text">
+									<span class="next-title">{n.title}</span>
+									<span class="next-note">{n.note}</span>
+								</span>
+							</li>
+						))}
+					</ol>
+
+					<details class="summary">
+						<summary>
+							<Icon name="plus" size={16} class="summary-icon" />
+							<span>See your answers</span>
+						</summary>
+						<dl class="answers" data-answers></dl>
+					</details>
+
+					<div class="sooner">
+						<p><strong>Rather talk now?</strong> Call us at <a href={CONTACT.phoneHref}>{CONTACT.phone}</a>.</p>
+						<a class="btn btn-secondary" href="/"><span>Back to home</span></a>
+					</div>
+				</section>
+			</div>
+		</main>
+
+		<script>
+			const flow = document.querySelector<HTMLElement>('[data-flow]')!;
+			const form = flow.querySelector<HTMLFormElement>('[data-form]')!;
+			const topline = flow.querySelector<HTMLElement>('[data-topline]')!;
+			const bar = flow.querySelector<HTMLElement>('[data-bar]')!;
+			const count = flow.querySelector<HTMLElement>('[data-count]')!;
+			const formError = flow.querySelector<HTMLElement>('[data-form-error]')!;
+			const submitLabel = flow.querySelector<HTMLElement>('[data-submit-label]')!;
+			const intro = flow.querySelector<HTMLElement>('[data-screen="intro"]')!;
+			const done = flow.querySelector<HTMLElement>('[data-screen="done"]')!;
+			const steps = Array.from(flow.querySelectorAll<HTMLElement>('[data-step]'));
+			const { endpoint, to } = flow.dataset;
+			const finePointer = matchMedia('(pointer: fine)');
+
+			// -1 = intro, 0..n-1 = steps, n = done
+			let current = -1;
+			let busy = false;
+			let autoTimer = 0;
+
+			const screenAt = (i: number) => (i < 0 ? intro : i >= steps.length ? done : steps[i]);
+
+			const show = (i: number) => {
+				const prev = screenAt(current);
+				const nextScreen = screenAt(i);
+				const forward = i > current;
+				prev.hidden = true;
+				nextScreen.hidden = false;
+				nextScreen.classList.remove('in-fwd', 'in-back');
+				void nextScreen.offsetWidth; // restart the entrance animation
+				nextScreen.classList.add(forward ? 'in-fwd' : 'in-back');
+				current = i;
+
+				const inSteps = i >= 0 && i < steps.length;
+				topline.hidden = !inSteps;
+				if (inSteps) {
+					count.textContent = String(i + 1);
+					bar.style.width = `${((i + 1) / steps.length) * 100}%`;
+				}
+				window.scrollTo({ top: 0 });
+
+				// Focus: first empty text field on desktop, otherwise the question heading
+				const firstText = nextScreen.querySelector<HTMLInputElement>('input.text');
+				if (inSteps && firstText && finePointer.matches) firstText.focus({ preventScroll: true });
+				else nextScreen.querySelector<HTMLElement>('[data-heading]')?.focus({ preventScroll: true });
+			};
+
+			// ---------- Validation ----------
+			const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+			const messages: Record<string, string> = {
+				business: 'Tell us your business name. A working name is fine.',
+				industry: 'Pick the closest match.',
+				goals: 'Pick at least one.',
+				has: 'Pick at least one, or “None of these yet”.',
+				timeline: 'Pick the closest match.',
+				name: 'Tell us what to call you.',
+			};
+
+			const errorFor = (q: HTMLElement): string => {
+				const name = q.dataset.q!;
+				const kind = q.dataset.kind;
+				if (kind === 'single' || kind === 'multi') {
+					const any = q.querySelector('input:checked');
+					return q.hasAttribute('data-required') && !any ? messages[name] ?? 'Pick an option.' : '';
+				}
+				const v = q.querySelector<HTMLInputElement>('input')!.value;
+				if (kind === 'email') return !v.trim() ? 'Enter your email so we can reply.' : emailOk(v) ? '' : 'Check the email address for typos.';
+				return q.hasAttribute('data-required') && !v.trim() ? messages[name] ?? 'This one’s required.' : '';
+			};
+
+			const setError = (q: HTMLElement, err: string) => {
+				const msg = q.querySelector<HTMLElement>('.msg')!;
+				msg.textContent = err;
+				q.classList.toggle('has-error', !!err);
+				q.querySelector('input.text')?.setAttribute('aria-invalid', String(!!err));
+			};
+
+			const validateStep = (step: HTMLElement) => {
+				let firstBad: HTMLElement | null = null;
+				step.querySelectorAll<HTMLElement>('.q').forEach((q) => {
+					const err = errorFor(q);
+					setError(q, err);
+					if (err && !firstBad) firstBad = q;
+				});
+				if (firstBad) {
+					const target = (firstBad as HTMLElement).querySelector<HTMLElement>('input.text, input:checked, input');
+					target?.focus();
+					return false;
+				}
+				return true;
+			};
+
+			// Clear an error as soon as it's fixed
+			form.addEventListener('input', (e) => {
+				const q = (e.target as HTMLElement).closest<HTMLElement>('.q');
+				if (q?.classList.contains('has-error') && !errorFor(q)) setError(q, '');
+			});
+
+			const goNext = () => {
+				if (busy || current < 0 || current >= steps.length - 1) return;
+				if (validateStep(steps[current])) show(current + 1);
+			};
+
+			// ---------- Choices ----------
+			form.addEventListener('change', (e) => {
+				const input = e.target as HTMLInputElement;
+				if (input.type === 'checkbox') {
+					// "None of these yet" clears the others, and vice versa
+					const group = form.querySelectorAll<HTMLInputElement>(`input[name="${input.name}"]`);
+					if (input.checked && input.hasAttribute('data-exclusive')) group.forEach((g) => g !== input && (g.checked = false));
+					else if (input.checked) group.forEach((g) => g.hasAttribute('data-exclusive') && (g.checked = false));
+				}
+				// Single-question, single-choice screens move on by themselves
+				const step = input.closest<HTMLElement>('[data-step]');
+				if (input.type === 'radio' && step?.hasAttribute('data-auto')) {
+					clearTimeout(autoTimer);
+					autoTimer = window.setTimeout(goNext, 380);
+				}
+			});
+
+			// ---------- Navigation ----------
+			flow.querySelector('[data-start-flow]')!.addEventListener('click', () => show(0));
+			flow.querySelector('[data-back]')!.addEventListener('click', () => {
+				clearTimeout(autoTimer);
+				if (current > -1 && current < steps.length) show(current - 1);
+			});
+			form.querySelectorAll('[data-next]').forEach((b) => b.addEventListener('click', goNext));
+
+			document.addEventListener('keydown', (e) => {
+				if (e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return;
+				const t = e.target as HTMLElement;
+				const inText = t instanceof HTMLInputElement && t.classList.contains('text');
+
+				if (e.key === 'Enter') {
+					if (current === -1 && !t.closest('a, button, summary')) {
+						e.preventDefault();
+						show(0);
+					} else if (current >= 0 && current < steps.length - 1 && (inText || t.matches('input, body, [data-heading]') || t === document.body)) {
+						e.preventDefault();
+						goNext();
+					}
+					// On the last step, Enter in a field submits the form natively
+					return;
+				}
+
+				// Letter shortcuts: A, B, C… pick an option when the screen has one choice question
+				if (inText || current < 0 || current >= steps.length || e.key.length !== 1) return;
+				const step = steps[current];
+				const name = step.dataset.keys;
+				if (!name) return;
+				const idx = 'ABCDEFGHIJ'.indexOf(e.key.toUpperCase());
+				const input = step.querySelectorAll<HTMLInputElement>(`input[name="${name}"]`)[idx];
+				if (!input) return;
+				e.preventDefault();
+				input.checked = input.type === 'radio' ? true : !input.checked;
+				input.focus();
+				input.dispatchEvent(new Event('change', { bubbles: true }));
+				input.dispatchEvent(new Event('input', { bubbles: true }));
+			});
+
+			// ---------- Submit ----------
+			const answers = () => {
+				const fd = new FormData(form);
+				const one = (k: string) => String(fd.get(k) ?? '').trim();
+				const many = (k: string) => fd.getAll(k).map(String).join(', ');
+				return {
+					business: one('business'),
+					industry: one('industry'),
+					goals: many('goals'),
+					has: many('has'),
+					timeline: one('timeline'),
+					name: one('name'),
+					email: one('email'),
+					phone: one('phone'),
+				};
+			};
+
+			const LABELS: [keyof ReturnType<typeof answers>, string][] = [
+				['business', 'Business'],
+				['industry', 'Type of business'],
+				['goals', 'Website should'],
+				['has', 'Already have'],
+				['timeline', 'Launch'],
+				['name', 'Name'],
+				['email', 'Email'],
+				['phone', 'Phone'],
+			];
+
+			const finish = (title: string, text: string, data: ReturnType<typeof answers>) => {
+				done.querySelector('[data-done-title]')!.textContent = title;
+				done.querySelector('[data-done-text]')!.textContent = text;
+				const dl = done.querySelector<HTMLElement>('[data-answers]')!;
+				dl.replaceChildren();
+				for (const [k, label] of LABELS) {
+					if (!data[k]) continue;
+					const dt = document.createElement('dt');
+					dt.textContent = label;
+					const dd = document.createElement('dd');
+					dd.textContent = data[k];
+					dl.append(dt, dd);
+				}
+				show(steps.length);
+			};
+
+			form.addEventListener('submit', async (e) => {
+				e.preventDefault();
+				if (busy) return;
+				formError.textContent = '';
+				if (!validateStep(steps[current])) return;
+				const trap = form.elements.namedItem('company_site') as HTMLInputElement;
+				if (trap.value) return; // bot
+
+				const data = answers();
+				const first = data.name.split(/\s+/)[0];
+				const subject = `New website: ${data.business}`;
+
+				if (!endpoint) {
+					const body = LABELS.filter(([k]) => data[k]).map(([k, label]) => `${label}: ${data[k]}`).join('\n');
+					window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+					finish(
+						'Almost done: hit send.',
+						`Your email app should have opened with your answers. Send it and we’ll get back to you at ${data.email}. Nothing opened? Email us at ${to}.`,
+						data,
+					);
+					return;
+				}
+
+				busy = true;
+				const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+				btn.disabled = true;
+				submitLabel.textContent = 'Sending…';
+				try {
+					const res = await fetch(endpoint, {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+						body: JSON.stringify({ ...data, _subject: subject }),
+					});
+					if (!res.ok) throw new Error(String(res.status));
+					finish(
+						`Thanks, ${first}. We’ve got your answers.`,
+						`We’ll be in touch at ${data.email}${data.phone ? ` or ${data.phone}` : ''} within one business day to talk about ${data.business}.`,
+						data,
+					);
+				} catch {
+					formError.textContent = `Something went wrong sending your answers. Please try again, or email us at ${to}.`;
+				} finally {
+					busy = false;
+					btn.disabled = false;
+					submitLabel.textContent = 'Send my answers';
+				}
+			});
+		</script>
+
+		<style>
+			/* Full-height focused layout under the sticky nav */
+			.flow {
+				min-height: calc(100svh - 72px);
+				display: grid;
+				grid-template-rows: auto 1fr;
+			}
+
+			/* Progress row */
+			.topline { border-bottom: 1px solid var(--border-subtle); background: var(--bg-canvas); }
+			.topline[hidden] { display: none; }
+			.topline-inner {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				height: 56px;
+			}
+			.back {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				min-height: 40px;
+				margin-left: calc(var(--s-2) * -1);
+				padding: 0 var(--s-2);
+				background: none;
+				border: 0;
+				border-radius: var(--radius-s);
+				color: var(--text-secondary);
+				font: inherit;
+				font-weight: 600;
+				font-size: 0.9375rem;
+				cursor: pointer;
+			}
+			.back:hover { background: var(--bg-subtle); color: var(--text-primary); }
+			.count { color: var(--text-tertiary); }
+			.bar { height: 3px; background: var(--bg-subtle); }
+			.bar span {
+				display: block;
+				height: 100%;
+				width: 0;
+				background: var(--action-primary);
+				transition: width 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+			}
+
+			/* Stage: one screen at a time, centred */
+			.stage {
+				display: grid;
+				align-items: center;
+				width: 100%;
+				padding-block: var(--s-7) var(--s-8);
+			}
+			.steps { display: contents; }
+			.screen {
+				display: grid;
+				gap: var(--s-6);
+				width: 100%;
+				max-width: 680px;
+				margin-inline: auto;
+			}
+			.screen[hidden] { display: none; }
+			[data-heading]:focus { outline: none; }
+
+			.in-fwd { animation: in-fwd 0.45s cubic-bezier(0.2, 0.7, 0.2, 1); }
+			.in-back { animation: in-back 0.45s cubic-bezier(0.2, 0.7, 0.2, 1); }
+			@keyframes in-fwd { from { opacity: 0; transform: translateY(24px); } }
+			@keyframes in-back { from { opacity: 0; transform: translateY(-24px); } }
+
+			/* Intro */
+			.intro { gap: var(--s-5); }
+			.lede { color: var(--text-secondary); max-width: 34rem; }
+
+			/* Questions */
+			.questions { display: grid; gap: var(--s-7); }
+			.step-title { margin-bottom: calc(var(--s-2) * -1); }
+			.step:has(.step-title) .questions { gap: var(--s-5); }
+
+			.q { display: grid; gap: var(--s-4); border: 0; margin: 0; padding: 0; min-width: 0; }
+			.q-label { display: grid; gap: var(--s-2); padding: 0; }
+			/* <legend> ignores the fieldset's grid gap, so space it directly */
+			fieldset > .q-label { margin-bottom: var(--s-4); }
+			.q-hint { color: var(--text-secondary); font-size: 1rem; }
+			.field-label { font-weight: 600; font-size: 0.9375rem; }
+			.step:has(.step-title) .q { gap: 6px; }
+			.opt { font-weight: 500; color: var(--text-tertiary); font-size: var(--fs-small); margin-left: 4px; }
+
+			.text {
+				width: 100%;
+				min-height: 52px;
+				padding: var(--s-3);
+				border: 1.5px solid var(--border-strong);
+				border-radius: var(--radius-s);
+				background: var(--bg-surface);
+				color: var(--text-primary);
+				font: inherit;
+				font-size: 1.0625rem;
+				transition: border-color 0.15s ease;
+			}
+			/* Typeform-style underline input for single-field questions */
+			.text.big {
+				min-height: 64px;
+				padding: var(--s-2) 0;
+				border: 0;
+				border-bottom: 2px solid var(--border-strong);
+				border-radius: 0;
+				background: transparent;
+				font-family: var(--font-display);
+				font-size: clamp(1.375rem, 1.1rem + 1.2vw, 1.875rem);
+				font-weight: 500;
+				letter-spacing: -0.01em;
+			}
+			.text:hover { border-color: var(--text-secondary); }
+			.text:focus { outline: 2px solid var(--border-focus); outline-offset: 0; border-color: var(--border-focus); }
+			.text.big:focus { outline: none; border-bottom-color: var(--action-primary); }
+			.text[aria-invalid='true'] { border-color: var(--danger-border); }
+			::placeholder { color: var(--text-tertiary); }
+
+			/* Choice cards */
+			.choices { display: grid; gap: var(--s-2); }
+			@media (min-width: 640px) {
+				.choices.two-col { grid-template-columns: 1fr 1fr; }
+			}
+			.choice { position: relative; display: block; }
+			.choice input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+			.choice-box {
+				display: flex;
+				align-items: center;
+				gap: var(--s-3);
+				min-height: 56px;
+				height: 100%;
+				padding: var(--s-2) var(--s-4) var(--s-2) var(--s-3);
+				border: 1.5px solid var(--border-strong);
+				border-radius: var(--radius-m);
+				background: var(--bg-surface);
+				font-weight: 500;
+				font-size: 1.0625rem;
+				line-height: 1.3;
+				pointer-events: none;
+				transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+			}
+			.choice:hover .choice-box { border-color: var(--text-primary); }
+			.choice:active .choice-box { transform: scale(0.99); }
+			.choice:has(input:focus-visible) .choice-box { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+			.choice:has(input:checked) .choice-box {
+				border-color: var(--action-primary);
+				background: color-mix(in srgb, var(--action-primary) 9%, var(--bg-surface));
+			}
+			.choice :global(.choice-icon) { flex: none; color: var(--text-secondary); }
+			.choice:has(input:checked) :global(.choice-icon) { color: var(--action-primary); }
+
+			.key {
+				display: grid;
+				place-items: center;
+				flex: none;
+				width: 28px;
+				height: 28px;
+				border: 1.5px solid var(--border-strong);
+				border-radius: var(--radius-s);
+				font-family: var(--font-mono);
+				font-size: var(--fs-label);
+				color: var(--text-secondary);
+				background: var(--bg-canvas);
+			}
+			.key :global(.key-check) { display: none; }
+			.choice:has(input:checked) .key {
+				background: var(--action-primary);
+				border-color: var(--action-primary);
+				color: var(--on-action-primary);
+			}
+			.choice:has(input:checked) .key-letter { display: none; }
+			.choice:has(input:checked) .key :global(.key-check) { display: block; }
+			/* Multi-select gets round keys so it reads as "pick several" */
+			[data-kind='multi'] .key { border-radius: 50%; }
+			/* Letters only where the shortcut works: one choice question per screen, with a keyboard */
+			.step:not([data-keys]) .key-letter { visibility: hidden; }
+			@media (pointer: coarse) {
+				.key-letter { visibility: hidden; }
+				.enter-hint { display: none; }
+			}
+
+			.msg { font-size: var(--fs-small); color: var(--danger-fg); font-weight: 600; }
+			.msg:empty { display: none; }
+			.has-error .choice-box { border-color: var(--danger-border); }
+
+			/* Actions */
+			.actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-4); }
+			.go { min-height: 52px; font-size: 1.0625rem; }
+			.go:disabled { opacity: 0.7; cursor: progress; }
+			.hint { display: inline-flex; align-items: center; gap: 6px; color: var(--text-tertiary); }
+			kbd {
+				font-family: var(--font-mono);
+				font-size: var(--fs-label);
+				font-weight: 500;
+				padding: 2px 6px;
+				border: 1px solid var(--border-strong);
+				border-radius: var(--radius-s);
+				color: var(--text-secondary);
+			}
+			.fine { color: var(--text-tertiary); margin-top: calc(var(--s-4) * -1); }
+			.form-error { color: var(--danger-fg); font-size: var(--fs-small); font-weight: 600; }
+			.form-error:empty { display: none; }
+			.trap { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+			/* Exit screen */
+			.done { gap: var(--s-5); }
+			.done-mark {
+				display: grid;
+				place-items: center;
+				width: 64px;
+				height: 64px;
+				border-radius: 50%;
+				background: var(--success-bg);
+				color: var(--success-fg);
+				border: 1.5px solid var(--success-border);
+			}
+			.next-label { color: var(--text-tertiary); margin-top: var(--s-4); }
+			.next {
+				display: grid;
+				padding: 0;
+				list-style: none;
+				border-top: 1px solid var(--border-subtle);
+			}
+			.next li {
+				display: grid;
+				grid-template-columns: auto auto 1fr;
+				align-items: start;
+				gap: var(--s-4);
+				padding: var(--s-4) 0;
+				border-bottom: 1px solid var(--border-subtle);
+			}
+			.next-num {
+				font-family: var(--font-mono);
+				font-size: var(--fs-label);
+				color: var(--text-tertiary);
+				padding-top: 14px;
+				min-width: 1ch;
+			}
+			.spot {
+				display: grid;
+				place-items: center;
+				width: 48px;
+				height: 48px;
+				border: 1.5px solid var(--text-primary);
+				border-radius: var(--radius-m);
+			}
+			.next li:first-child .spot {
+				background: var(--action-primary);
+				border-color: var(--action-primary);
+				color: var(--on-action-primary);
+			}
+			.next-text { display: grid; gap: 2px; padding-top: 2px; }
+			.next-title { font-family: var(--font-display); font-weight: 700; font-size: 1.125rem; letter-spacing: -0.01em; }
+			.next-note { color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.45; }
+
+			.summary summary {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--s-2);
+				font-weight: 600;
+				font-size: 0.9375rem;
+				color: var(--text-link);
+				cursor: pointer;
+				list-style: none;
+			}
+			.summary summary::-webkit-details-marker { display: none; }
+			.summary summary :global(.summary-icon) { transition: transform 0.2s ease; }
+			.summary[open] summary :global(.summary-icon) { transform: rotate(45deg); }
+			.answers {
+				display: grid;
+				grid-template-columns: minmax(0, 10rem) 1fr;
+				gap: var(--s-2) var(--s-4);
+				margin: var(--s-4) 0 0;
+				padding: var(--s-4);
+				background: var(--bg-surface);
+				border: 1px solid var(--border-subtle);
+				border-radius: var(--radius-m);
+				font-size: 0.9375rem;
+			}
+			.answers :global(dt) { color: var(--text-tertiary); }
+			.answers :global(dd) { margin: 0; overflow-wrap: anywhere; }
+			@media (max-width: 480px) {
+				.answers { grid-template-columns: 1fr; gap: 0; }
+				.answers :global(dd) { margin-bottom: var(--s-3); }
+			}
+
+			.sooner {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--s-4);
+				padding: var(--s-5);
+				background: var(--bg-subtle);
+				border-radius: var(--radius-m);
+			}
+			.sooner a:not(.btn) { color: var(--text-link); font-weight: 600; }
+		</style>
+	</body>
+</html>

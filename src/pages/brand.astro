@@ -1,0 +1,1200 @@
+---
+import "../styles/brand.css";
+import Icon from "../components/Icon.astro";
+import { icons, iconCategories } from "../icons";
+import ColorTokens from "../components/ColorTokens.astro";
+import { scales, STEPS, anchors, scaleInfo, tokenGroups, allTokens, pairs, dataviz, resolve, contrast, bestText } from "../colors";
+
+const BRAND = "Arlington Websites";
+const TAGLINE = "Marketing for the businesses on your block.";
+
+const core = [
+	{ name: "Blue", ref: "blue.600", hex: scales.blue[600], role: "Primary. CTAs, links, key moments. Use with intent." },
+	{ name: "Graphite", ref: "neutral.950", hex: scales.neutral[950], role: "Text, dark sections, footer." },
+	{ name: "Coconut", ref: "neutral.50", hex: scales.neutral[50], role: "Default page background. Warm, not stark white." },
+];
+
+const anchorAt = (scale: string, step: number) =>
+	Object.entries(anchors).find(([, a]) => a.scale === scale && a.step === step)?.[0];
+
+const tok = (name: string) => allTokens.find((t) => t.name === name)!;
+const ratio = (fg: string, bg: string, theme: "light" | "dark") =>
+	contrast(resolve(tok(fg)[theme]), resolve(tok(bg)[theme]));
+const grade = (r: number, min: number) =>
+	min === 3
+		? { ok: r >= 3, label: r >= 3 ? "3:1 ✓" : "Fail" }
+		: r >= 7 ? { ok: true, label: "AAA" } : r >= 4.5 ? { ok: true, label: "AA" } : { ok: false, label: "Fail" };
+
+const checks = [
+	{ label: "Body text on page", fg: "text-primary", bg: "bg-canvas", min: 4.5 },
+	{ label: "Body text on card", fg: "text-primary", bg: "bg-surface", min: 4.5 },
+	{ label: "Secondary text on page", fg: "text-secondary", bg: "bg-canvas", min: 4.5 },
+	{ label: "Secondary text on card", fg: "text-secondary", bg: "bg-surface", min: 4.5 },
+	{ label: "Tertiary text on page", fg: "text-tertiary", bg: "bg-canvas", min: 4.5 },
+	{ label: "Tertiary text on card", fg: "text-tertiary", bg: "bg-surface", min: 4.5 },
+	{ label: "Link on page", fg: "text-link", bg: "bg-canvas", min: 4.5 },
+	{ label: "Primary button label", fg: "on-action-primary", bg: "action-primary", min: 4.5 },
+	{ label: "Inverse band text", fg: "text-inverse", bg: "bg-inverse", min: 4.5 },
+	{ label: "Success message", fg: "success-fg", bg: "success-bg", min: 4.5 },
+	{ label: "Warning message", fg: "warning-fg", bg: "warning-bg", min: 4.5 },
+	{ label: "Error message", fg: "danger-fg", bg: "danger-bg", min: 4.5 },
+	{ label: "Info message", fg: "info-fg", bg: "info-bg", min: 4.5 },
+	{ label: "Input border on card", fg: "border-strong", bg: "bg-surface", min: 3 },
+	{ label: "Focus ring on page", fg: "border-focus", bg: "bg-canvas", min: 3 },
+];
+
+const scale = [
+	{ name: "Display XL", cls: "t-dxl", spec: "Schibsted Grotesk 800 · 104/96 · −3%", sample: "Get found." },
+	{ name: "Display L", cls: "t-dl", spec: "Schibsted Grotesk 800 · 72/68 · −3%", sample: "Be the local favorite." },
+	{ name: "H1", cls: "t-h1", spec: "Schibsted Grotesk 700 · 52/56 · −2%", sample: "Websites that bring in calls" },
+	{ name: "H2", cls: "t-h2", spec: "Schibsted Grotesk 700 · 36/40 · −1.5%", sample: "Local SEO, done right" },
+	{ name: "H3", cls: "t-h3", spec: "Schibsted Grotesk 700 · 22/28 · −1%", sample: "Google Business Profile" },
+	{ name: "Body L", cls: "t-bl", spec: "Hanken Grotesk 400 · 20/30", sample: "We help neighborhood businesses show up where customers are already looking." },
+	{ name: "Body", cls: "t-b", spec: "Hanken Grotesk 400 · 17/27", sample: "Plain language, real numbers, and a team you can actually call." },
+	{ name: "Label", cls: "t-label", spec: "IBM Plex Mono 500 · 12/16 · +8% · caps", sample: "Case study · 2026" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>Brand Guide · {BRAND}</title>
+		<ColorTokens />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<header class="nav">
+			<div class="wrap nav-inner">
+				<a class="logo" href="#top">{BRAND}</a>
+				<nav class="nav-links" aria-label="Sections">
+					<a href="#logo">Logo</a>
+					<a href="#color">Color</a>
+					<a href="#type">Type</a>
+					<a href="#icons">Icons</a>
+					<a href="#ui">Components</a>
+					<a href="#voice">Voice</a>
+				</nav>
+			</div>
+		</header>
+
+		<main id="top">
+			<!-- Hero -->
+			<section class="hero wrap">
+				<p class="t-label">Brand foundations · v0.1</p>
+				<h1 class="t-dxl">{TAGLINE}</h1>
+				<p class="t-bl hero-sub">
+					{BRAND} is a local marketing agency. The brand is direct, warm and confident: lots of
+					space, one bold blue, and color pairs used like signage. This page is the source of truth
+					for building the site.
+				</p>
+			</section>
+
+			<!-- Logo -->
+			<section id="logo" class="section wrap">
+				<div class="section-head">
+					<p class="t-label">01</p>
+					<h2 class="t-h1">Logo</h2>
+					<p class="t-b muted">
+						A wordmark only: the name set in Schibsted Grotesk 800 with tight tracking, and no
+						symbol. Use Graphite or Blue on light backgrounds and Coconut or white on dark ones. Keep
+						clear space equal to the cap height on every side.
+					</p>
+				</div>
+				<div class="logo-grid">
+					{[
+						{ bg: "var(--c-white)", fg: "var(--c-graphite)" },
+						{ bg: "var(--c-blue)", fg: "#fff" },
+						{ bg: "var(--c-graphite)", fg: "var(--c-coconut)" },
+					].map((v) => (
+						<div class="logo-tile" style={`background:${v.bg};color:${v.fg}`}>
+							<span class="logo logo-lg">{BRAND}</span>
+						</div>
+					))}
+				</div>
+			</section>
+
+			<!-- Color -->
+			<section id="color" class="section wrap">
+				<div class="section-head">
+					<p class="t-label">02</p>
+					<h2 class="t-h1">Color</h2>
+					<p class="t-b muted">
+						The system has three layers. Brand colors set the personality. Tonal scales give every
+						hue a full range from 50 to 950. Semantic tokens tell components which step to use in
+						light and dark themes. Build with tokens and never with raw hex values. Click any
+						swatch to copy it.
+					</p>
+				</div>
+
+				<p class="t-label layer-label">Layer 1 · Brand colors</p>
+				<div class="core-grid">
+					{core.map((c) => (
+						<button class="swatch swatch-core" style={`background:${c.hex};color:${bestText(c.hex)}`} data-hex={c.hex}>
+							<span class="t-h2">{c.name}</span>
+							<span class="swatch-meta">
+								<span class="t-label">{c.hex} · {c.ref}</span>
+								<span class="t-small">{c.role}</span>
+							</span>
+						</button>
+					))}
+				</div>
+
+				<h3 class="t-h3 sub">Accent pairs</h3>
+				<p class="t-b muted sub-note">Each pair is two steps of the same scale. One is always the background and the other the type. Never mix pairs.</p>
+				<div class="pair-grid">
+					{pairs.map((p) => {
+						const bg = resolve(p.bg), fg = resolve(p.fg);
+						return (
+							<button class="swatch swatch-pair" style={`background:${bg};color:${fg}`} data-hex={bg}>
+								<span class="t-dl pair-aa">Aa</span>
+								<span class="swatch-meta">
+									<span class="t-h3">{p.name}</span>
+									<span class="t-label">{p.bg} / {p.fg}</span>
+									<span class="t-small">{p.use} · {contrast(bg, fg).toFixed(1)}:1</span>
+								</span>
+							</button>
+						);
+					})}
+				</div>
+
+				<p class="t-label layer-label">Layer 2 · Tonal scales</p>
+				<p class="t-b muted sub-note">
+					Generated in OKLCH so each step looks evenly spaced. ● marks the step where a brand color
+					sits. Each chip shows its contrast with white (W) or Graphite (G) text. For text on white,
+					use step 600 or darker. For icons and borders, 500 or darker.
+				</p>
+				<div class="scales">
+					<div class="scale-steps" aria-hidden="true">
+						<span></span>
+						{STEPS.map((st) => <span class="t-label muted">{st}</span>)}
+					</div>
+					{(Object.keys(scales) as (keyof typeof scales)[]).map((name) => (
+						<div class="scale-line">
+							<div class="scale-name">
+								<span class="t-h3">{scaleInfo[name].label}</span>
+								<span class="t-small muted">{scaleInfo[name].role}</span>
+							</div>
+							{STEPS.map((st) => {
+								const hex = scales[name][st];
+								const fg = bestText(hex);
+								const anchor = anchorAt(name, st);
+								return (
+									<button class="chip" style={`background:${hex};color:${fg}`} data-hex={hex} title={`--${name}-${st} ${hex}${anchor ? ` · ${anchor}` : ""}`}>
+										<span class="chip-step">{st}{anchor && <b> ●</b>}</span>
+										<span class="chip-hex">{hex.slice(1)}</span>
+										<span class="chip-ratio">{fg === "#FFFFFF" ? "W" : "G"} {contrast(hex, fg).toFixed(1)}</span>
+									</button>
+								);
+							})}
+						</div>
+					))}
+				</div>
+
+				<p class="t-label layer-label">Layer 3 · Semantic tokens</p>
+				<p class="t-b muted sub-note">
+					Components use these names and nothing else. Each token points to a scale step in each
+					theme, so dark mode is a token swap rather than a redesign. In CSS:
+					<code>color: var(--text-secondary)</code>.
+				</p>
+				<div class="token-table" role="table">
+					<div class="tok-row tok-head" role="row">
+						<span class="t-label muted" role="columnheader">Token</span>
+						<span class="t-label muted" role="columnheader">Use</span>
+						<span class="t-label muted" role="columnheader">Light</span>
+						<span class="t-label muted" role="columnheader">Dark</span>
+					</div>
+					{tokenGroups.map((g) => (
+						<>
+							<div class="tok-group t-label" role="row"><span role="cell">{g.group}</span></div>
+							{g.tokens.map((t) => (
+								<div class="tok-row" role="row">
+									<code role="cell">--{t.name}</code>
+									<span class="t-small muted" role="cell">{t.role}</span>
+									<span class="tok-val" role="cell"><i style={`background:${resolve(t.light)}`}></i><span class="t-small">{t.light}</span></span>
+									<span class="tok-val" role="cell"><i style={`background:${resolve(t.dark)}`}></i><span class="t-small">{t.dark}</span></span>
+								</div>
+							))}
+						</>
+					))}
+				</div>
+
+				<h3 class="t-h3 sub">Light & dark</h3>
+				<p class="t-b muted sub-note">The same markup rendered with each theme's tokens.</p>
+				<div class="theme-grid">
+					{["light", "dark"].map((theme) => (
+						<div class="theme-panel" data-theme={theme}>
+							<span class="t-label tp-tertiary">{theme} theme</span>
+							<div class="tp-card">
+								<h4 class="t-h2">Free local visibility audit</h4>
+								<p class="t-b tp-secondary">See how you show up on Google Maps and search compared with competitors nearby.</p>
+								<label class="tp-field">
+									<span class="t-small">Business name</span>
+									<input type="text" placeholder="e.g. Clarendon Coffee Co." />
+								</label>
+								<div class="row">
+									<a class="tp-btn" href="#color"><span>Get my audit</span><Icon name="arrow-right" /></a>
+									<a class="tp-link" href="#color">How it works</a>
+								</div>
+								<p class="t-small tp-tertiary">Takes 2 minutes · No commitment</p>
+								<div class="alert alert-success"><Icon name="check" size={20} /><span class="t-small">Audit requested. Check your inbox.</span></div>
+							</div>
+						</div>
+					))}
+				</div>
+
+				<h3 class="t-h3 sub">Status</h3>
+				<p class="t-b muted sub-note">
+					Status colors only ever signal state. Pair each one with an icon and words, never color
+					alone. Tangerine is a brand accent and is not used for errors.
+				</p>
+				<div class="alert-grid">
+					<div class="alert alert-success"><Icon name="check" size={20} /><span class="t-small"><b>Success.</b> Your site is live.</span></div>
+					<div class="alert alert-warning"><Icon name="alert" size={20} /><span class="t-small"><b>Warning.</b> Your SSL certificate expires in 7 days.</span></div>
+					<div class="alert alert-danger"><Icon name="alert" size={20} /><span class="t-small"><b>Error.</b> Enter a valid phone number.</span></div>
+					<div class="alert alert-info"><Icon name="info" size={20} /><span class="t-small"><b>Info.</b> Reports update every Monday.</span></div>
+				</div>
+
+				<h3 class="t-h3 sub">Contrast checks</h3>
+				<p class="t-b muted sub-note">
+					Calculated from the tokens when the site builds. Text needs 4.5:1 (AA). Borders, focus
+					rings and icons need 3:1.
+				</p>
+				<div class="contrast-table" role="table">
+					<div class="cx-row cx-head" role="row">
+						<span class="t-label muted" role="columnheader">Pairing</span>
+						<span class="t-label muted" role="columnheader">Light</span>
+						<span class="t-label muted" role="columnheader">Dark</span>
+					</div>
+					{checks.map((c) => (
+						<div class="cx-row" role="row">
+							<span role="cell">
+								<span class="t-small">{c.label}</span>
+								<code class="cx-code">{c.fg} on {c.bg}</code>
+							</span>
+							{(["light", "dark"] as const).map((th) => {
+								const r = ratio(c.fg, c.bg, th);
+								const lvl = grade(r, c.min);
+								const fg = resolve(tok(c.fg)[th]), bg = resolve(tok(c.bg)[th]);
+								return (
+									<span class="cx-cell" role="cell">
+										<span class="cx-sample" style={`background:${bg};color:${fg};box-shadow:inset 0 0 0 1px ${c.min === 3 ? fg : "transparent"}`}>Aa</span>
+										<span class="t-small">{r.toFixed(2)}:1</span>
+										<span class={`badge badge-${lvl.ok ? "pass" : "fail"}`}>{lvl.label}</span>
+									</span>
+								);
+							})}
+						</div>
+					))}
+				</div>
+
+				<h3 class="t-h3 sub">Data visualization</h3>
+				<p class="t-b muted sub-note">
+					For charts in reports and case studies. Use categorical colors from the left and no
+					more than six series. Each one is at least 3:1 against white, so lines and bars stay
+					visible.
+				</p>
+				<div class="dv">
+					<div class="dv-row">
+						<span class="t-label muted dv-label">Categorical</span>
+						<div class="dv-cats">
+							{dataviz.categorical.map((r, i) => (
+								<button class="dv-cat" data-hex={resolve(r)}>
+									<i style={`background:${resolve(r)}`}></i>
+									<span class="t-small">{i + 1}. {r}</span>
+									<span class="t-label muted">{contrast(resolve(r), "#FFFFFF").toFixed(1)}:1</span>
+								</button>
+							))}
+						</div>
+					</div>
+					<div class="dv-row">
+						<span class="t-label muted dv-label">Sequential</span>
+						<div class="dv-strip">{dataviz.sequential.map((r) => <i style={`background:${resolve(r)}`} title={r}></i>)}</div>
+					</div>
+					<div class="dv-row">
+						<span class="t-label muted dv-label">Diverging</span>
+						<div class="dv-strip">{dataviz.diverging.map((r) => <i style={`background:${resolve(r)}`} title={r}></i>)}</div>
+					</div>
+				</div>
+
+				<h3 class="t-h3 sub">Proportion</h3>
+				<div class="ratio" role="img" aria-label="Color proportion: 60% Coconut, 25% Graphite, 10% Blue, 5% accents">
+					<span style="flex:60;background:var(--c-coconut);color:var(--c-graphite)">Coconut 60</span>
+					<span style="flex:25;background:var(--c-graphite);color:var(--c-coconut)">Graphite 25</span>
+					<span style="flex:10;background:var(--c-blue);color:#fff">Blue 10</span>
+					<span style="flex:5;background:var(--c-tangerine)"></span>
+				</div>
+			</section>
+
+			<!-- Type -->
+			<section id="type" class="section wrap">
+				<div class="section-head">
+					<p class="t-label">03</p>
+					<h2 class="t-h1">Typography</h2>
+					<p class="t-b muted">
+						Tight, heavy grotesk headlines over a friendly, readable text face, with a mono for
+						small labels. Schibsted Grotesk, Hanken Grotesk and IBM Plex Mono are free Google Fonts that
+						stand in for Sharp Grotesk, Atlas Grotesk and Atlas Typewriter.
+					</p>
+				</div>
+
+				<div class="font-cards">
+					<div class="font-card">
+						<span class="t-label">Display</span>
+						<span class="font-aa" style="font-family:var(--font-display);font-weight:800">Aa</span>
+						<span class="t-h3">Schibsted Grotesk</span>
+						<span class="t-small muted">500 · 700 · 800</span>
+					</div>
+					<div class="font-card">
+						<span class="t-label">Text</span>
+						<span class="font-aa" style="font-family:var(--font-body);font-weight:500">Aa</span>
+						<span class="t-h3">Hanken Grotesk</span>
+						<span class="t-small muted">400 · 500 · 600</span>
+					</div>
+					<div class="font-card">
+						<span class="t-label">Label</span>
+						<span class="font-aa" style="font-family:var(--font-mono);font-weight:500">Aa</span>
+						<span class="t-h3">IBM Plex Mono</span>
+						<span class="t-small muted">500, caps only</span>
+					</div>
+				</div>
+
+				<div class="scale">
+					{scale.map((s) => (
+						<div class="scale-row">
+							<div class="scale-meta">
+								<span class="t-h3">{s.name}</span>
+								<span class="t-label muted">{s.spec}</span>
+							</div>
+							<p class={s.cls}>{s.sample}</p>
+						</div>
+					))}
+				</div>
+			</section>
+
+			<!-- Icons -->
+			<section id="icons" class="section wrap">
+				<div class="section-head">
+					<p class="t-label">04</p>
+					<h2 class="t-h1">Icons</h2>
+					<p class="t-b muted">
+						A small set of line icons drawn on one grid. Their square ends and sharp corners match
+						the headline type and the flat UI. Icons support words and never replace them. Click
+						any icon to copy its component code.
+					</p>
+				</div>
+
+				<div class="icon-spec">
+					<div class="icon-construct" aria-hidden="true">
+						<svg viewBox="0 0 24 24">
+							{Array.from({ length: 23 }, (_, i) => (
+								<>
+									<line x1={i + 1} y1="0" x2={i + 1} y2="24" class="g" />
+									<line x1="0" y1={i + 1} x2="24" y2={i + 1} class="g" />
+								</>
+							))}
+							<rect x="2" y="2" width="20" height="20" class="live" />
+							<g class="glyph" set:html={icons["storefront"]} />
+						</svg>
+					</div>
+					<dl class="spec-list">
+						<div><dt class="t-label">Grid</dt><dd>24 × 24 with 2px padding, giving a 20 × 20 live area</dd></div>
+						<div><dt class="t-label">Stroke</dt><dd>2px, outline only, no fills</dd></div>
+						<div><dt class="t-label">Ends & corners</dt><dd>Square caps, miter joins. Curves only where the object is round.</dd></div>
+						<div><dt class="t-label">Color</dt><dd>One color, inherited from the text (<code>currentColor</code>)</dd></div>
+						<div><dt class="t-label">Sizes</dt><dd>16 inline · 20 buttons · 24 UI default · 32 spot icons</dd></div>
+						<div><dt class="t-label">Code</dt><dd><code>&lt;Icon name="phone" /&gt;</code> in <code>src/components/Icon.astro</code></dd></div>
+					</dl>
+				</div>
+
+				<div class="icon-sizes">
+					{[16, 20, 24, 32].map((s) => (
+						<div class="icon-size">
+							<Icon name="map-pin" size={s as 16 | 20 | 24 | 32} />
+							<span class="t-label muted">{s}px</span>
+						</div>
+					))}
+				</div>
+
+				{iconCategories.map((cat) => (
+					<div class="icon-cat">
+						<div class="icon-cat-head">
+							<h3 class="t-h3">{cat.name}</h3>
+							<p class="t-small muted">{cat.note}</p>
+						</div>
+						<div class="icon-grid">
+							{cat.icons.map((n) => (
+								<button class="icon-cell" data-copy={`<Icon name="${n}" />`} title={`Copy <Icon name="${n}" />`}>
+									<Icon name={n} size={24} />
+									<span class="t-small">{n}</span>
+								</button>
+							))}
+						</div>
+					</div>
+				))}
+
+				<h3 class="t-h3 sub">Spot icons</h3>
+				<p class="t-b muted spot-note">
+					On service and stat cards, a 32px icon sits in a 56px square that uses one accent pair.
+					Use one spot icon per card, and only one accent pair in a row of cards.
+				</p>
+				<div class="spot-grid">
+					{[
+						{ icon: "website", label: "Websites", bg: "var(--c-sky)", fg: "var(--c-navy)" },
+						{ icon: "map-pin", label: "Local SEO", bg: "var(--c-lime)", fg: "var(--c-forest)" },
+						{ icon: "megaphone", label: "Ads", bg: "#FFD3C2", fg: "#8A2A0A" },
+						{ icon: "users", label: "Social", bg: "var(--c-pink)", fg: "var(--c-plum)" },
+					].map((s) => (
+						<div class="spot-card">
+							<span class="spot" style={`background:${s.bg};color:${s.fg}`}>
+								<Icon name={s.icon as any} size={32} />
+							</span>
+							<span class="t-h3">{s.label}</span>
+						</div>
+					))}
+				</div>
+
+				<div class="icon-rules">
+					<div class="voice-card">
+						<h3 class="t-h3">Do</h3>
+						<p class="t-b">Pair icons with a label. Use the next size up rather than scaling by eye. Keep them the same color as the text beside them.</p>
+					</div>
+					<div class="voice-card">
+						<h3 class="t-h3">Don't</h3>
+						<p class="t-b muted">Mix in filled or rounded icons from other sets. Use two colors inside one icon. Rotate, outline or add shadows. Use emoji in their place.</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- Components -->
+			<section id="ui" class="section wrap">
+				<div class="section-head">
+					<p class="t-label">05</p>
+					<h2 class="t-h1">Components</h2>
+					<p class="t-b muted">Flat surfaces, 1px borders, 4–8px corners. No drop shadows and no gradients.</p>
+				</div>
+
+				<div class="ui-grid">
+					<div class="ui-block">
+						<span class="t-label muted">Buttons</span>
+						<div class="row">
+							<a class="btn btn-primary" href="#ui"><span>Get a free audit</span><Icon name="arrow-right" /></a>
+							<a class="btn btn-secondary" href="#ui"><span>See our work</span><Icon name="arrow-up-right" /></a>
+							<a class="btn btn-link" href="#ui"><span>Learn more</span><Icon name="arrow-right" /></a>
+						</div>
+					</div>
+					<div class="ui-block">
+						<span class="t-label muted">Tags</span>
+						<div class="row">
+							<span class="tag" style="background:var(--c-sky);color:var(--c-navy)">Local SEO</span>
+							<span class="tag" style="background:var(--c-lime);color:var(--c-forest)">+212% calls</span>
+							<span class="tag" style="background:var(--c-pink);color:var(--c-plum)">Social</span>
+							<span class="tag tag-outline">Web design</span>
+						</div>
+					</div>
+					<div class="ui-block">
+						<span class="t-label muted">Form field</span>
+						<label class="field">
+							<span class="t-small">Business name</span>
+							<input type="text" placeholder="e.g. Clarendon Coffee Co." />
+						</label>
+					</div>
+				</div>
+
+				<div class="card-grid">
+					<article class="card">
+						<span class="spot" style="background:var(--c-sky);color:var(--c-navy)"><Icon name="website" size={32} /></span>
+						<span class="t-label">Service</span>
+						<h3 class="t-h2">Websites</h3>
+						<p class="t-b muted">Fast, mobile-first sites built to turn visitors into calls and bookings.</p>
+						<a class="btn btn-link" href="#ui"><span>Explore</span><Icon name="arrow-right" /></a>
+					</article>
+					<article class="card" style="background:var(--c-navy);color:var(--c-sky);border-color:var(--c-navy)">
+						<span class="t-label">Case study</span>
+						<p class="stat">3.4×</p>
+						<p class="t-b">more map-pack views for a neighborhood dental practice in 90 days.</p>
+					</article>
+					<article class="card" style="background:var(--c-blue);color:#fff;border-color:var(--c-blue)">
+						<span class="t-label">Get started</span>
+						<h3 class="t-h2">Free local visibility audit</h3>
+						<a class="btn btn-invert" href="#ui"><Icon name="phone" /><span>Book a call</span></a>
+					</article>
+				</div>
+			</section>
+
+			<!-- Voice -->
+			<section id="voice" class="section wrap">
+				<div class="section-head">
+					<p class="t-label">06</p>
+					<h2 class="t-h1">Voice</h2>
+					<p class="t-b muted">We sound like a sharp neighbor who knows marketing, not like an agency pitch deck.</p>
+				</div>
+				<div class="voice-grid">
+					{[
+						["Plain", "We get you more calls.", "We leverage omnichannel synergies."],
+						["Specific", "Up 212% in 6 months.", "Massive growth, fast!"],
+						["Local", "Built for Arlington and the DFW area.", "Serving clients worldwide."],
+						["Warm", "Questions? Just call us.", "Submit a ticket for support."],
+					].map(([trait, yes, no]) => (
+						<div class="voice-card">
+							<h3 class="t-h3">{trait}</h3>
+							<p class="t-b"><span class="yes">Say</span> “{yes}”</p>
+							<p class="t-b muted"><span class="no">Not</span> “{no}”</p>
+						</div>
+					))}
+				</div>
+			</section>
+
+			<!-- In use -->
+			<section class="section">
+				<div class="wrap">
+					<div class="section-head">
+						<p class="t-label">07</p>
+						<h2 class="t-h1">In use</h2>
+					</div>
+				</div>
+				<div class="demo">
+					<div class="wrap demo-inner">
+						<div>
+							<p class="t-label" style="color:var(--c-lime)">Arlington · Texas</p>
+							<h2 class="t-dl">Be the first name your neighbors find.</h2>
+							<p class="t-bl" style="opacity:.8">Websites, local SEO and ads for small businesses, from a team down the street.</p>
+							<div class="row" style="margin-top:var(--s-6)">
+								<a class="btn btn-primary" href="#top"><span>Get a free audit</span><Icon name="arrow-right" /></a>
+								<a class="btn btn-ghost-dark" href="#top"><span>See our work</span><Icon name="arrow-up-right" /></a>
+							</div>
+						</div>
+						<div class="demo-tiles" aria-hidden="true">
+							<div style="background:var(--c-pink);color:var(--c-plum)"><span class="stat">48</span><span class="t-small">local clients</span></div>
+							<div style="background:var(--c-lime);color:var(--c-forest)"><span class="stat">+212%</span><span class="t-small">avg. call lift</span></div>
+							<div style="background:var(--c-blue);color:#fff;grid-column:span 2"><span class="stat">4.9★</span><span class="t-small">Google rating</span></div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<footer class="foot wrap">
+			<span class="t-small muted">{BRAND} brand guide · draft</span>
+			<span class="toast" id="copied" role="status" aria-live="polite"></span>
+		</footer>
+
+		<script>
+			const out = document.getElementById("copied");
+			let timer: number | undefined;
+			const toast = (msg: string) => {
+				if (!out) return;
+				out.textContent = msg;
+				out.classList.add("show");
+				clearTimeout(timer);
+				timer = window.setTimeout(() => out.classList.remove("show"), 1800);
+			};
+			document.querySelectorAll<HTMLElement>("[data-hex], [data-copy]").forEach((el) => {
+				el.addEventListener("click", async () => {
+					const text = el.dataset.hex ?? el.dataset.copy!;
+					try {
+						await navigator.clipboard.writeText(text);
+						toast(`Copied ${text}`);
+					} catch {
+						toast(text);
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
+
+<style is:global>
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+	html {
+		scroll-behavior: smooth;
+		scroll-padding-top: 80px;
+	}
+	body {
+		margin: 0;
+		background: var(--bg);
+		color: var(--text);
+		font-family: var(--font-body);
+		font-size: var(--fs-body);
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+	}
+	h1, h2, h3, p {
+		margin: 0;
+	}
+	a {
+		color: inherit;
+	}
+
+	/* Type scale */
+	.t-dxl, .t-dl, .t-h1, .t-h2, .t-h3, .stat {
+		font-family: var(--font-display);
+		text-wrap: balance;
+	}
+	.t-dxl { font-size: var(--fs-display-xl); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; }
+	.t-dl { font-size: var(--fs-display-l); font-weight: 800; line-height: 0.98; letter-spacing: -0.03em; }
+	.t-h1 { font-size: var(--fs-h1); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; }
+	.t-h2 { font-size: var(--fs-h2); font-weight: 700; line-height: 1.1; letter-spacing: -0.015em; }
+	.t-h3 { font-size: var(--fs-h3); font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; }
+	.t-bl { font-size: var(--fs-body-l); line-height: 1.5; }
+	.t-b { font-size: var(--fs-body); line-height: 1.6; }
+	.t-small { font-size: var(--fs-small); line-height: 1.45; }
+	.t-label {
+		font-family: var(--font-mono);
+		font-size: var(--fs-label);
+		font-weight: 500;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	.muted { color: var(--text-muted); }
+	.stat { font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+
+	/* Layout */
+	.wrap {
+		max-width: var(--max-w);
+		margin-inline: auto;
+		padding-inline: var(--s-4);
+	}
+	@media (min-width: 768px) {
+		.wrap { padding-inline: var(--s-7); }
+	}
+	.section { padding-block: var(--s-9) 0; }
+	.section-head {
+		display: grid;
+		gap: var(--s-3);
+		max-width: 680px;
+		margin-bottom: var(--s-7);
+	}
+	.sub { margin: var(--s-8) 0 var(--s-4); }
+	.row { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; }
+
+	/* Nav */
+	.nav {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		background: color-mix(in srgb, var(--c-coconut) 92%, transparent);
+		backdrop-filter: blur(8px);
+		border-bottom: 1px solid var(--border);
+	}
+	.nav-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--s-4);
+		height: 64px;
+	}
+	.nav-links { display: none; gap: var(--s-5); }
+	.nav-links a { text-decoration: none; font-weight: 500; font-size: var(--fs-small); }
+	.nav-links a:hover { color: var(--primary); }
+	@media (min-width: 768px) {
+		.nav-links { display: flex; }
+	}
+	.logo {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: 1.125rem;
+		letter-spacing: -0.02em;
+		text-decoration: none;
+	}
+	.logo-lg { font-size: clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem); }
+
+	/* Hero */
+	.hero { padding-block: var(--s-9) var(--s-4); display: grid; gap: var(--s-5); }
+	.hero .t-dxl { max-width: 14ch; }
+	.hero-sub { max-width: 640px; color: var(--text-muted); }
+
+	/* Logo tiles */
+	.logo-grid { display: grid; gap: var(--s-4); grid-template-columns: 1fr; }
+	@media (min-width: 900px) { .logo-grid { grid-template-columns: repeat(3, 1fr); } }
+	.logo-tile {
+		aspect-ratio: 16 / 10;
+		display: grid;
+		place-items: center;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-m);
+		padding: var(--s-5);
+	}
+
+	/* Swatches */
+	.swatch {
+		all: unset;
+		box-sizing: border-box;
+		cursor: pointer;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: var(--s-5);
+		padding: var(--s-5);
+		border-radius: var(--radius-m);
+		transition: transform 0.15s ease;
+	}
+	.swatch:hover { transform: translateY(-2px); }
+	.swatch:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+	.swatch-meta { display: grid; gap: var(--s-1); }
+	.core-grid { display: grid; gap: var(--s-4); grid-template-columns: 1fr; }
+	@media (min-width: 900px) { .core-grid { grid-template-columns: 2fr 1fr 1fr; } }
+	.swatch-core { min-height: 280px; }
+	.core-grid .swatch-core:nth-child(3) { box-shadow: inset 0 0 0 1px var(--border); }
+	.pair-grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+	.swatch-pair { min-height: 240px; }
+	.pair-aa { line-height: 0.8; }
+	.ratio {
+		display: flex;
+		height: 72px;
+		border-radius: var(--radius-m);
+		overflow: hidden;
+		box-shadow: inset 0 0 0 1px var(--border);
+	}
+	.ratio span {
+		display: flex;
+		align-items: flex-end;
+		padding: var(--s-3);
+		font-family: var(--font-mono);
+		font-size: var(--fs-label);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		white-space: nowrap;
+		overflow: hidden;
+		min-width: 0;
+	}
+
+	/* Type section */
+	.font-cards { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: var(--s-8); }
+	.font-card {
+		display: grid;
+		gap: var(--s-2);
+		padding: var(--s-5);
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-m);
+	}
+	.font-aa { font-size: 6rem; line-height: 1; letter-spacing: -0.03em; margin-block: var(--s-4); }
+	.scale { border-top: 1px solid var(--c-graphite); }
+	.scale-row {
+		display: grid;
+		gap: var(--s-3);
+		padding-block: var(--s-6);
+		border-bottom: 1px solid var(--border);
+	}
+	@media (min-width: 900px) {
+		.scale-row { grid-template-columns: 260px 1fr; gap: var(--s-6); align-items: baseline; }
+	}
+	.scale-meta { display: grid; gap: var(--s-1); }
+	.scale-row p { overflow-wrap: anywhere; }
+
+	/* Components */
+	.ui-grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-bottom: var(--s-4); }
+	.ui-block {
+		display: grid;
+		gap: var(--s-4);
+		align-content: start;
+		padding: var(--s-5);
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-m);
+	}
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 48px;
+		padding: 0 var(--s-5);
+		border-radius: var(--radius-s);
+		font-family: var(--font-body);
+		font-weight: 600;
+		font-size: 1rem;
+		text-decoration: none;
+		border: 1.5px solid transparent;
+		gap: 10px;
+		transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+	}
+	.btn .icon { flex: none; transition: transform 0.2s ease; }
+	.btn:hover .icon { transform: translateX(3px); }
+	.btn-secondary:hover .icon, .btn-ghost-dark:hover .icon { transform: translate(2px, -2px); }
+	.btn-invert:hover .icon { transform: none; }
+	.btn-link .icon { width: 1.1em; height: 1.1em; }
+	.btn-primary { background: var(--primary); color: var(--on-primary); }
+	.btn-primary:hover { background: var(--primary-hover); }
+	.btn-secondary { border-color: var(--c-graphite); color: var(--c-graphite); }
+	.btn-secondary:hover { background: var(--c-graphite); color: var(--c-coconut); }
+	.btn-link { padding: 0; min-height: auto; color: var(--primary); justify-content: flex-start; }
+	.btn-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+	.btn-invert { background: #fff; color: var(--c-blue); justify-self: start; }
+	.btn-invert:hover { background: var(--c-coconut); }
+	.btn-ghost-dark { border-color: rgba(247, 245, 242, 0.5); color: var(--c-coconut); }
+	.btn-ghost-dark:hover { border-color: var(--c-coconut); }
+	.tag {
+		display: inline-flex;
+		padding: 6px 12px;
+		border-radius: 999px;
+		font-size: var(--fs-small);
+		font-weight: 600;
+	}
+	.tag-outline { box-shadow: inset 0 0 0 1px var(--c-graphite); }
+	.field { display: grid; gap: var(--s-2); }
+	.field input {
+		font: inherit;
+		min-height: 48px;
+		padding: 0 var(--s-4);
+		border: 1.5px solid var(--border);
+		border-radius: var(--radius-s);
+		background: var(--c-coconut);
+		color: var(--text);
+	}
+	.field input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 97, 254, 0.2); }
+	.card-grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+	.card {
+		display: grid;
+		gap: var(--s-4);
+		align-content: start;
+		min-height: 300px;
+		padding: var(--s-6);
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-m);
+	}
+
+	/* Color system */
+	.layer-label {
+		margin: var(--s-9) 0 var(--s-4);
+		padding-top: var(--s-4);
+		border-top: 1px solid var(--c-graphite);
+	}
+	.section-head + .layer-label { margin-top: 0; }
+	.sub-note { max-width: 680px; margin: calc(var(--s-4) * -0.5) 0 var(--s-5); }
+	.layer-label + .sub-note { margin-top: 0; }
+
+	.scales { display: grid; gap: 6px; overflow-x: auto; padding-bottom: var(--s-2); }
+	.scale-steps, .scale-line {
+		display: grid;
+		grid-template-columns: minmax(150px, 220px) repeat(11, minmax(64px, 1fr));
+		gap: 6px;
+		min-width: 900px;
+	}
+	.scale-steps span { text-align: center; }
+	.scale-name { display: grid; align-content: center; gap: 2px; padding-right: var(--s-3); }
+	.scale-name .t-small { font-size: 0.75rem; line-height: 1.35; }
+	.chip {
+		all: unset;
+		box-sizing: border-box;
+		cursor: pointer;
+		display: grid;
+		align-content: space-between;
+		gap: 2px;
+		min-height: 76px;
+		padding: 8px;
+		border-radius: var(--radius-s);
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		line-height: 1.2;
+		transition: transform 0.15s ease;
+	}
+	.chip:hover { transform: translateY(-2px); }
+	.chip:focus-visible { outline: 3px solid var(--c-blue); outline-offset: 2px; }
+	.chip-step { font-weight: 500; }
+	.chip-hex, .chip-ratio { opacity: 0.85; }
+	.scale-line:first-of-type .chip:first-of-type, .chip[style*="#F"] { box-shadow: inset 0 0 0 1px rgba(30, 25, 25, 0.06); }
+
+	.token-table, .contrast-table {
+		border-top: 1px solid var(--c-graphite);
+		background: var(--surface);
+		border-radius: 0 0 var(--radius-m) var(--radius-m);
+	}
+	.tok-row {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--s-2);
+		padding: var(--s-3) var(--s-4);
+		border-bottom: 1px solid var(--border);
+		align-items: center;
+	}
+	@media (min-width: 900px) {
+		.tok-row { grid-template-columns: 240px 1fr 180px 180px; gap: var(--s-4); }
+	}
+	.tok-head { display: none; }
+	@media (min-width: 900px) { .tok-head { display: grid; } }
+	.tok-group { padding: var(--s-5) var(--s-4) var(--s-2); color: var(--c-blue); }
+	.tok-row code { background: none; padding: 0; font-size: 0.8125rem; }
+	.tok-val { display: inline-flex; align-items: center; gap: var(--s-2); }
+	.tok-val i {
+		width: 22px;
+		height: 22px;
+		border-radius: var(--radius-s);
+		box-shadow: inset 0 0 0 1px rgba(30, 25, 25, 0.15);
+		flex: none;
+	}
+
+	.theme-grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+	.theme-panel {
+		display: grid;
+		gap: var(--s-4);
+		padding: var(--s-6);
+		background: var(--bg-canvas);
+		color: var(--text-primary);
+		border-radius: var(--radius-m);
+		border: 1px solid var(--border-subtle);
+	}
+	.tp-card {
+		display: grid;
+		gap: var(--s-4);
+		padding: var(--s-6);
+		background: var(--bg-surface);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-m);
+	}
+	.tp-secondary { color: var(--text-secondary); }
+	.tp-tertiary { color: var(--text-tertiary); }
+	.tp-field { display: grid; gap: var(--s-2); }
+	.tp-field input {
+		font: inherit;
+		min-height: 48px;
+		padding: 0 var(--s-4);
+		border: 1.5px solid var(--border-strong);
+		border-radius: var(--radius-s);
+		background: var(--bg-surface);
+		color: var(--text-primary);
+	}
+	.tp-field input::placeholder { color: var(--text-tertiary); }
+	.tp-field input:focus { outline: 2px solid var(--border-focus); outline-offset: 1px; }
+	.tp-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		min-height: 48px;
+		padding: 0 var(--s-5);
+		border-radius: var(--radius-s);
+		background: var(--action-primary);
+		color: var(--on-action-primary);
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.tp-btn:hover { background: var(--action-primary-hover); }
+	.tp-btn:active { background: var(--action-primary-pressed); }
+	.tp-link { color: var(--text-link); font-weight: 600; text-underline-offset: 4px; }
+
+	.alert-grid { display: grid; gap: var(--s-3); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+	.alert {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--s-3);
+		padding: var(--s-3) var(--s-4);
+		border-radius: var(--radius-s);
+		border: 1px solid;
+		border-left-width: 4px;
+	}
+	.alert .icon { margin-top: 1px; }
+	.alert-success { color: var(--success-fg); background: var(--success-bg); border-color: var(--success-border); border-left-color: var(--success-fg); }
+	.alert-warning { color: var(--warning-fg); background: var(--warning-bg); border-color: var(--warning-border); border-left-color: var(--warning-fg); }
+	.alert-danger { color: var(--danger-fg); background: var(--danger-bg); border-color: var(--danger-border); border-left-color: var(--danger-fg); }
+	.alert-info { color: var(--info-fg); background: var(--info-bg); border-color: var(--info-border); border-left-color: var(--info-fg); }
+
+	.cx-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--s-3) var(--s-4);
+		padding: var(--s-3) var(--s-4);
+		border-bottom: 1px solid var(--border);
+		align-items: center;
+	}
+	.cx-row > span:first-child { grid-column: 1 / -1; display: grid; gap: 2px; }
+	@media (min-width: 900px) {
+		.cx-row { grid-template-columns: 1fr 260px 260px; }
+		.cx-row > span:first-child { grid-column: auto; }
+	}
+	.cx-head { display: none; }
+	@media (min-width: 900px) { .cx-head { display: grid; } }
+	.cx-code { background: none; padding: 0; font-size: 0.75rem; color: var(--text-muted); }
+	.cx-cell { display: inline-flex; align-items: center; gap: var(--s-3); }
+	.cx-sample {
+		display: inline-grid;
+		place-items: center;
+		width: 44px;
+		height: 32px;
+		border-radius: var(--radius-s);
+		font-family: var(--font-display);
+		font-weight: 700;
+		flex: none;
+		outline: 1px solid rgba(30, 25, 25, 0.12);
+	}
+	.badge {
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		font-weight: 500;
+		letter-spacing: 0.04em;
+		padding: 3px 8px;
+		border-radius: 999px;
+	}
+	.badge-pass { background: var(--lime-100); color: var(--lime-800); }
+	.badge-fail { background: var(--red-100); color: var(--red-700); }
+
+	.dv { display: grid; gap: var(--s-5); padding: var(--s-6); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-m); }
+	.dv-row { display: grid; gap: var(--s-3); }
+	@media (min-width: 900px) { .dv-row { grid-template-columns: 140px 1fr; align-items: center; } }
+	.dv-cats { display: grid; gap: var(--s-2); grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+	.dv-cat {
+		all: unset;
+		cursor: pointer;
+		display: grid;
+		grid-template-columns: 28px 1fr;
+		gap: 2px var(--s-3);
+		align-items: center;
+	}
+	.dv-cat i { grid-row: span 2; width: 28px; height: 28px; border-radius: var(--radius-s); }
+	.dv-strip { display: flex; height: 40px; border-radius: var(--radius-s); overflow: hidden; }
+	.dv-strip i { flex: 1; }
+
+	/* Icons */
+	.icon { display: block; flex: none; }
+	.icon-spec {
+		display: grid;
+		gap: var(--s-6);
+		padding: var(--s-6);
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-m);
+		margin-bottom: var(--s-4);
+	}
+	@media (min-width: 900px) {
+		.icon-spec { grid-template-columns: 320px 1fr; align-items: center; gap: var(--s-8); }
+	}
+	.icon-construct svg { width: 100%; max-width: 320px; display: block; aspect-ratio: 1; }
+	.icon-construct .g { stroke: var(--c-line); stroke-width: 0.04; }
+	.icon-construct .live { fill: rgba(0, 97, 254, 0.06); stroke: var(--c-blue); stroke-width: 0.06; stroke-dasharray: 0.3 0.2; }
+	.icon-construct .glyph { fill: none; stroke: var(--c-graphite); stroke-width: 2; stroke-linecap: square; stroke-linejoin: miter; }
+	.spec-list { display: grid; gap: var(--s-4); margin: 0; }
+	.spec-list div { display: grid; gap: var(--s-1); padding-bottom: var(--s-4); border-bottom: 1px solid var(--border); }
+	.spec-list div:last-child { border-bottom: 0; padding-bottom: 0; }
+	.spec-list dd { margin: 0; }
+	code { font-family: var(--font-mono); font-size: 0.875em; background: var(--c-coconut); padding: 2px 6px; border-radius: var(--radius-s); }
+	.icon-sizes {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-6);
+		align-items: flex-end;
+		padding: var(--s-5) var(--s-6);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-m);
+		margin-bottom: var(--s-7);
+	}
+	.icon-size { display: grid; justify-items: center; gap: var(--s-2); }
+	.icon-cat { margin-bottom: var(--s-7); }
+	.icon-cat-head { display: grid; gap: var(--s-1); margin-bottom: var(--s-4); max-width: 640px; }
+	.icon-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+		border-top: 1px solid var(--border);
+		border-left: 1px solid var(--border);
+	}
+	.icon-cell {
+		all: unset;
+		box-sizing: border-box;
+		cursor: pointer;
+		display: grid;
+		justify-items: center;
+		align-content: center;
+		gap: var(--s-3);
+		aspect-ratio: 1;
+		padding: var(--s-3);
+		border-right: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+		background: var(--surface);
+		transition: background 0.15s ease, color 0.15s ease;
+	}
+	.icon-cell .t-small { color: var(--text-muted); font-size: 0.75rem; text-align: center; overflow-wrap: anywhere; }
+	.icon-cell:hover { background: var(--c-blue); color: #fff; }
+	.icon-cell:hover .t-small { color: rgba(255, 255, 255, 0.85); }
+	.icon-cell:focus-visible { outline: 3px solid var(--primary); outline-offset: -3px; }
+	.spot {
+		display: inline-grid;
+		place-items: center;
+		width: 56px;
+		height: 56px;
+		border-radius: var(--radius-m);
+		justify-self: start;
+	}
+	.spot-note { max-width: 640px; margin-bottom: var(--s-5); }
+	.spot-grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: var(--s-7); }
+	.spot-card {
+		display: grid;
+		gap: var(--s-5);
+		padding: var(--s-5);
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-m);
+	}
+	.icon-rules { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+	.toast {
+		position: fixed;
+		left: 50%;
+		bottom: var(--s-5);
+		transform: translate(-50%, 16px);
+		max-width: calc(100% - 32px);
+		padding: 10px 16px;
+		background: var(--c-graphite);
+		color: var(--c-coconut);
+		font-family: var(--font-mono);
+		font-size: var(--fs-small);
+		border-radius: var(--radius-s);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+		z-index: 20;
+	}
+	.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+	/* Voice */
+	.voice-grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+	.voice-card {
+		display: grid;
+		gap: var(--s-3);
+		padding: var(--s-5);
+		border-top: 3px solid var(--c-graphite);
+	}
+	.yes, .no {
+		font-family: var(--font-mono);
+		font-size: var(--fs-label);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		margin-right: 6px;
+	}
+	.yes { color: var(--c-forest); }
+	.no { color: #b3261e; }
+
+	/* Demo */
+	.demo { background: var(--c-graphite); color: var(--c-coconut); padding-block: var(--s-9); }
+	.demo-inner { display: grid; gap: var(--s-7); align-items: center; }
+	.demo-inner .t-dl { margin-block: var(--s-4); max-width: 12ch; }
+	@media (min-width: 900px) { .demo-inner { grid-template-columns: 1.3fr 1fr; } }
+	.demo-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+	.demo-tiles > div {
+		display: grid;
+		gap: var(--s-2);
+		align-content: end;
+		min-height: 160px;
+		padding: var(--s-5);
+		border-radius: var(--radius-m);
+	}
+
+	/* Footer */
+	.foot {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--s-4);
+		padding-block: var(--s-6);
+	}
+</style>

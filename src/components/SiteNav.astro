@@ -1,0 +1,242 @@
+---
+import Icon from './Icon.astro';
+import SiteMenu from './SiteMenu.astro';
+import Logo from './Logo.astro';
+import { SITE_TITLE, START_OPTIONS } from '../consts';
+---
+
+<header class="site-nav">
+	<div class="wrap nav-inner">
+		<a class="logo" href="/" aria-label={`${SITE_TITLE} home`}><Logo /></a>
+
+		<div class="nav-actions">
+			<div class="start" data-start>
+				<button
+					class="btn btn-primary btn-sm start-btn"
+					type="button"
+					aria-expanded="false"
+					aria-controls="start-menu"
+				>
+					<span>Start here</span>
+					<Icon name="chevron-down" size={20} class="chev" />
+				</button>
+
+				<div id="start-menu" class="start-menu">
+					<p class="t-label menu-label">Where are you starting from?</p>
+					<ul>
+						{START_OPTIONS.map((o) => (
+							<li>
+								<a class="option" href={o.href}>
+									<span class="spot"><Icon name={o.icon} size={24} /></span>
+									<span class="text">
+										<span class="title">{o.label}</span>
+										<span class="note">{o.note}</span>
+									</span>
+									<Icon name="arrow-right" size={20} class="go" />
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</div>
+
+			<button
+				class="burger"
+				type="button"
+				data-menu-open
+				aria-haspopup="dialog"
+				aria-expanded="false"
+				aria-controls="site-menu"
+				aria-label="Open menu"
+			>
+				<Icon name="menu" size={24} />
+			</button>
+		</div>
+	</div>
+</header>
+
+<SiteMenu />
+
+<script>
+	const root = document.querySelector<HTMLElement>('[data-start]');
+	const btn = root?.querySelector<HTMLButtonElement>('.start-btn');
+	const menu = root?.querySelector<HTMLElement>('.start-menu');
+
+	if (root && btn && menu) {
+		const items = () => Array.from(menu.querySelectorAll<HTMLAnchorElement>('.option'));
+		const isOpen = () => btn.getAttribute('aria-expanded') === 'true';
+		const setOpen = (open: boolean) => {
+			btn.setAttribute('aria-expanded', String(open));
+			root.classList.toggle('is-open', open);
+		};
+
+		btn.addEventListener('click', () => setOpen(!isOpen()));
+
+		// Arrow keys move between the two options
+		root.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && isOpen()) {
+				setOpen(false);
+				btn.focus();
+				return;
+			}
+			if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+			e.preventDefault();
+			if (!isOpen()) setOpen(true);
+			const list = items();
+			const i = list.indexOf(document.activeElement as HTMLAnchorElement);
+			const next = e.key === 'ArrowDown' ? (i + 1) % list.length : (i - 1 + list.length) % list.length;
+			list[i === -1 ? 0 : next].focus();
+		});
+
+		// Close on outside click, when focus leaves, or after choosing an option
+		document.addEventListener('click', (e) => {
+			if (isOpen() && !root.contains(e.target as Node)) setOpen(false);
+		});
+		root.addEventListener('focusout', (e) => {
+			if (!root.contains(e.relatedTarget as Node)) setOpen(false);
+		});
+		items().forEach((a) => a.addEventListener('click', () => setOpen(false)));
+	}
+</script>
+
+<style>
+	.site-nav {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: color-mix(in srgb, var(--bg-inverse) 96%, transparent);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		color: var(--text-inverse);
+	}
+	/* Light focus ring on the dark bar */
+	.site-nav :focus-visible { outline-color: var(--blue-400); }
+	.nav-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--s-5);
+		height: 72px;
+	}
+	.logo :global(.aw-logo) { height: 36px; }
+	@media (max-width: 480px) {
+		.nav-inner { gap: var(--s-3); }
+		.logo { min-width: 0; flex: 0 1 auto; }
+		.logo :global(.aw-logo) { height: auto; width: 100%; max-width: 190px; }
+	}
+
+	.nav-actions {
+		position: relative; /* dropdown anchors to the right edge of the action group */
+		display: flex;
+		align-items: center;
+		gap: var(--s-2);
+	}
+	.burger {
+		display: grid;
+		place-items: center;
+		width: 40px;
+		height: 40px;
+		background: none;
+		border: 1.5px solid color-mix(in srgb, var(--text-inverse) 55%, transparent);
+		border-radius: var(--radius-s);
+		color: var(--text-inverse);
+		cursor: pointer;
+		transition: background 0.15s ease, color 0.15s ease;
+	}
+	.burger:hover {
+		background: var(--text-inverse);
+		border-color: var(--text-inverse);
+		color: var(--bg-inverse);
+	}
+
+	/* Start here */
+	.start { position: static; }
+	.start-btn { gap: 6px; padding-right: var(--s-3); white-space: nowrap; }
+	.start-btn :global(.chev) { transition: transform 0.2s ease; }
+	.is-open .start-btn :global(.chev) { transform: rotate(180deg); }
+	/* Override the generic button-icon nudge for the chevron */
+	.start-btn:hover :global(.chev) { transform: none; }
+	.is-open .start-btn:hover :global(.chev) { transform: rotate(180deg); }
+
+	.start-menu {
+		color: var(--text-primary);
+		position: absolute;
+		top: calc(100% + 12px);
+		right: 0;
+		width: min(360px, calc(100vw - 2 * var(--s-4)));
+		padding: var(--s-2);
+		background: var(--bg-surface);
+		border: 1.5px solid var(--text-primary);
+		border-radius: var(--radius-m);
+		box-shadow: 0 24px 48px -24px color-mix(in srgb, var(--text-primary) 45%, transparent);
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-6px);
+		transform-origin: top right;
+		transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+	}
+	.is-open .start-menu {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s;
+	}
+	.menu-label {
+		padding: var(--s-3) var(--s-3) var(--s-2);
+		color: var(--text-tertiary);
+	}
+	.start-menu ul {
+		display: grid;
+		gap: 2px;
+		padding: 0;
+		list-style: none;
+	}
+
+	.option {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+		gap: var(--s-3);
+		padding: var(--s-3);
+		border-radius: var(--radius-s);
+		text-decoration: none;
+		transition: background 0.15s ease;
+	}
+	.option:hover,
+	.option:focus-visible { background: var(--bg-subtle); }
+	.option:focus-visible { outline-offset: -2px; }
+	.spot {
+		display: grid;
+		place-items: center;
+		width: 48px;
+		height: 48px;
+		border: 1.5px solid var(--text-primary);
+		border-radius: var(--radius-m);
+		transition: background 0.15s ease, color 0.15s ease;
+	}
+	.option:hover .spot {
+		background: var(--text-primary);
+		color: var(--bg-surface);
+	}
+	.text { display: grid; gap: 2px; }
+	.title {
+		font-family: var(--font-display);
+		font-size: 1.0625rem;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+		line-height: 1.25;
+	}
+	.note {
+		font-size: var(--fs-small);
+		line-height: 1.4;
+		color: var(--text-secondary);
+	}
+	.option :global(.go) {
+		opacity: 0.35;
+		transition: opacity 0.15s ease, transform 0.15s ease;
+	}
+	.option:hover :global(.go) {
+		opacity: 1;
+		transform: translateX(3px);
+	}
+</style>

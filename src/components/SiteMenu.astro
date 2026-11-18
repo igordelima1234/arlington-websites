@@ -1,0 +1,270 @@
+---
+/*
+  Right-side sidebar menu, opened by the hamburger in SiteNav.
+  Built on <dialog>: showModal() gives focus trapping, Esc handling and an inert page.
+  Open/close are animated via the .is-open class; see the script below.
+*/
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import type { IconName } from '../icons';
+import { MENU, CONTACT } from '../consts';
+---
+
+<dialog id="site-menu" class="menu" aria-label="Site menu">
+	<div class="scrim" data-close></div>
+
+	<div class="panel">
+		<div class="panel-head">
+			<a class="logo" href="/"><Logo /></a>
+			<button class="icon-btn" type="button" data-close aria-label="Close menu" autofocus>
+				<Icon name="close" size={24} />
+			</button>
+		</div>
+
+		<nav class="panel-nav" aria-label="Main">
+			<ul class="top">
+				{MENU.map((item) => (
+					<li>
+						{item.children ? (
+							<details>
+								<summary>
+									<span>{item.label}</span>
+									<Icon name="chevron-down" size={24} class="chev" />
+								</summary>
+								<ul class="sub">
+									{item.children.map((c) => (
+										<li>
+											<a href={c.href}>
+												{c.icon && (
+													<span class="spot"><Icon name={c.icon as IconName} size={20} /></span>
+												)}
+												<span class="sub-text">
+													<span class="sub-title">{c.label}</span>
+													{c.note && <span class="sub-note">{c.note}</span>}
+												</span>
+											</a>
+										</li>
+									))}
+								</ul>
+							</details>
+						) : (
+							<a class="top-link" href={item.href}>{item.label}</a>
+						)}
+					</li>
+				))}
+			</ul>
+		</nav>
+
+		<div class="panel-foot">
+			<p class="t-label foot-label">Talk to a real person</p>
+			<ul class="contact">
+				<li><a href={CONTACT.phoneHref}><Icon name="phone" size={20} />{CONTACT.phone}</a></li>
+				<li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={20} />{CONTACT.email}</a></li>
+				<li><span><Icon name="map-pin" size={20} />{CONTACT.area}</span></li>
+			</ul>
+			<a class="btn btn-primary book" href="/book-a-call"><Icon name="calendar" /><span>Book a call</span></a>
+		</div>
+	</div>
+</dialog>
+
+<script>
+	const menu = document.getElementById('site-menu') as HTMLDialogElement | null;
+	const openers = document.querySelectorAll<HTMLButtonElement>('[data-menu-open]');
+	const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+
+	if (menu) {
+		const panel = menu.querySelector<HTMLElement>('.panel')!;
+
+		const open = () => {
+			if (menu.open) return;
+			menu.showModal();
+			document.documentElement.style.overflow = 'hidden';
+			openers.forEach((b) => b.setAttribute('aria-expanded', 'true'));
+			requestAnimationFrame(() => menu.classList.add('is-open'));
+		};
+
+		const close = () => {
+			if (!menu.open) return;
+			menu.classList.remove('is-open');
+			const finish = () => {
+				menu.close();
+				document.documentElement.style.overflow = '';
+				openers.forEach((b) => b.setAttribute('aria-expanded', 'false'));
+			};
+			if (reduce.matches) return finish();
+			panel.addEventListener('transitionend', finish, { once: true });
+		};
+
+		openers.forEach((b) => b.addEventListener('click', open));
+		menu.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', close));
+		// Esc: run the animated close instead of the instant native one
+		menu.addEventListener('cancel', (e) => {
+			e.preventDefault();
+			close();
+		});
+		// Following a link closes the menu (anchors on this page, or before navigating)
+		menu.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((a) => a.addEventListener('click', close));
+	}
+</script>
+
+<style>
+	/* The dialog covers the viewport; the scrim and panel inside it do the visuals */
+	.menu {
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		max-width: none;
+		height: 100%;
+		max-height: none;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--text-primary);
+		overflow: hidden;
+	}
+	.menu::backdrop { background: transparent; }
+
+	.scrim {
+		position: absolute;
+		inset: 0;
+		background: color-mix(in srgb, var(--neutral-950) 45%, transparent);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+	.panel {
+		position: absolute;
+		inset: 0 0 0 auto;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		width: min(420px, 90vw);
+		background: var(--bg-canvas);
+		border-left: 1.5px solid var(--text-primary);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		transform: translateX(100%);
+		transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+	.is-open .scrim { opacity: 1; }
+	.is-open .panel { transform: none; }
+
+	.panel-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 72px;
+		padding: 0 var(--s-4) 0 var(--s-5);
+		border-bottom: 1px solid var(--border-subtle);
+	}
+	.logo :global(.aw-logo) { height: 26px; }
+	.icon-btn {
+		display: grid;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		background: none;
+		border: 0;
+		border-radius: var(--radius-s);
+		color: inherit;
+		cursor: pointer;
+	}
+	.icon-btn:hover { background: var(--bg-subtle); }
+
+	/* Top-level items */
+	.panel-nav { padding: var(--s-3) var(--s-5); }
+	.top {
+		display: grid;
+		padding: 0;
+		list-style: none;
+	}
+	.top > li { border-bottom: 1px solid var(--border-subtle); }
+	.top-link,
+	summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: var(--s-4) 0;
+		font-family: var(--font-display);
+		font-size: 1.5rem;
+		font-weight: 700;
+		letter-spacing: -0.015em;
+		line-height: 1.2;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	summary { list-style: none; }
+	summary::-webkit-details-marker { display: none; }
+	.top-link:hover,
+	summary:hover { color: var(--action-primary); }
+	summary :global(.chev) { transition: transform 0.2s ease; }
+	details[open] summary :global(.chev) { transform: rotate(180deg); }
+
+	/* Sub-items */
+	.sub {
+		display: grid;
+		gap: 2px;
+		padding: 0 0 var(--s-4);
+		list-style: none;
+	}
+	details[open] .sub { animation: sub-in 0.25s ease; }
+	@keyframes sub-in {
+		from { opacity: 0; transform: translateY(-4px); }
+	}
+	.sub a {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+		padding: var(--s-2);
+		margin-inline: calc(var(--s-2) * -1);
+		border-radius: var(--radius-s);
+		text-decoration: none;
+	}
+	.sub a:hover { background: var(--bg-subtle); }
+	.spot {
+		display: grid;
+		flex: none;
+		place-items: center;
+		width: 40px;
+		height: 40px;
+		border: 1.5px solid var(--text-primary);
+		border-radius: var(--radius-s);
+		transition: background 0.15s ease, color 0.15s ease;
+	}
+	.sub a:hover .spot {
+		background: var(--text-primary);
+		color: var(--bg-canvas);
+	}
+	.sub-text { display: grid; }
+	.sub-title { font-weight: 600; }
+	.sub-note {
+		font-size: var(--fs-small);
+		color: var(--text-secondary);
+	}
+
+	/* Contact */
+	.panel-foot {
+		display: grid;
+		gap: var(--s-4);
+		padding: var(--s-5);
+		border-top: 1px solid var(--border-subtle);
+		background: var(--bg-surface);
+	}
+	.foot-label { color: var(--text-tertiary); }
+	.contact {
+		display: grid;
+		gap: var(--s-3);
+		padding: 0;
+		list-style: none;
+	}
+	.contact a,
+	.contact span {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--s-3);
+		text-decoration: none;
+		overflow-wrap: anywhere;
+	}
+	.contact a:hover { color: var(--action-primary); }
+	.contact :global(.icon) { flex: none; }
+	.book { justify-self: start; }
+</style>

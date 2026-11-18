@@ -1,0 +1,48 @@
+---
+/*
+  Eyebrow: the small label above a section title.
+  Blue pill, white dot, uppercase mono text.
+
+  <Eyebrow>Our work</Eyebrow>
+  <Eyebrow as="span">Inline label</Eyebrow>
+*/
+interface Props {
+	as?: 'p' | 'span' | 'div';
+	class?: string;
+}
+
+const { as: Tag = 'p', class: cls } = Astro.props;
+---
+
+<Tag class:list={['eyebrow', cls]}>
+	<span class="dot" aria-hidden="true"></span>
+	<span><slot /></span>
+</Tag>
+
+<style>
+	.eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		justify-self: start; /* don't stretch inside grid layouts */
+		width: fit-content;
+		margin: 0;
+		padding: 6px 14px 6px 11px;
+		border-radius: 999px;
+		background: var(--action-primary);
+		color: var(--on-action-primary);
+		font-family: var(--font-mono);
+		font-size: var(--fs-label);
+		font-weight: 500;
+		line-height: 1.2;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	.dot {
+		flex: none;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--white);
+	}
+</style>

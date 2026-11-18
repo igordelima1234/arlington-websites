@@ -1,0 +1,180 @@
+---
+/*
+  /book-a-call: embeds the Google Calendar appointment schedule set in
+  BOOKING_URL (src/consts.ts). Full calendar.google.com schedule links are
+  embedded inline; short calendar.app.google links can't be framed, so they
+  get a button that opens the booking page instead. Empty = phone/email only.
+*/
+import '../styles/brand.css';
+import '../styles/site.css';
+import ColorTokens from '../components/ColorTokens.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Icon from '../components/Icon.astro';
+import { SITE_TITLE, CONTACT, BOOKING_URL } from '../consts';
+
+const bookingUrl = BOOKING_URL.trim();
+let embedUrl = '';
+if (/^https:\/\/calendar\.google\.com\/calendar\/appointments\//.test(bookingUrl)) {
+	const u = new URL(bookingUrl);
+	u.searchParams.set('gv', 'true');
+	embedUrl = u.toString();
+}
+
+const agenda = [
+	{ icon: 'chat', title: 'Your business and goals', note: 'Who your customers are and what you want more of: calls, bookings, foot traffic.' },
+	{ icon: 'search', title: 'A quick look at where you stand', note: 'Your current site, Google listing and what competitors nearby are doing.' },
+	{ icon: 'target', title: 'Clear next steps', note: 'What we’d do first, rough cost and timeline. No pressure to sign anything.' },
+] as const;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Book a Call · {SITE_TITLE}</title>
+		<meta name="description" content="Pick a time for a free 30-minute call with a local Arlington, TX web and marketing team." />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+		<ColorTokens />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<SiteNav />
+
+		<main id="main">
+			<section class="wrap book">
+				<div class="pitch">
+					<p class="t-label eyebrow">Free · 30 minutes</p>
+					<h1 class="t-h1">Book a call with a real person.</h1>
+					<p class="t-bl sub">
+						Pick a time that works for you. We’ll talk through your business and tell you honestly what would help most.
+					</p>
+
+					<ul class="perks">
+						{agenda.map((p) => (
+							<li>
+								<span class="spot"><Icon name={p.icon} size={24} /></span>
+								<span>
+									<span class="perk-title">{p.title}</span>
+									<span class="perk-note">{p.note}</span>
+								</span>
+							</li>
+						))}
+					</ul>
+
+					<p class="t-small alt">
+						Prefer to talk now? Call <a href={CONTACT.phoneHref}>{CONTACT.phone}</a> or email
+						<a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.
+					</p>
+				</div>
+
+				<div class="card">
+					{embedUrl ? (
+						<>
+							<div class="frame" data-frame>
+								<p class="loading t-small" aria-hidden="true"><Icon name="calendar" size={20} />Loading available times…</p>
+								<iframe
+									src={embedUrl}
+									title="Pick a time for your call"
+									loading="lazy"
+									onload="this.parentElement.classList.add('is-loaded')"
+								></iframe>
+							</div>
+							<p class="t-small fine">
+								Calendar not showing? <a href={bookingUrl} target="_blank" rel="noopener">Open the booking page</a>.
+							</p>
+						</>
+					) : bookingUrl ? (
+						<div class="fallback">
+							<span class="mark"><Icon name="calendar" size={32} /></span>
+							<h2 class="t-h2">See open times</h2>
+							<p class="t-b">Our calendar opens in a new tab. Pick a slot and you’ll get a confirmation by email.</p>
+							<a class="btn btn-primary big" href={bookingUrl} target="_blank" rel="noopener">
+								<span>Choose a time</span><Icon name="arrow-right" />
+							</a>
+						</div>
+					) : (
+						<div class="fallback">
+							<span class="mark"><Icon name="phone" size={32} /></span>
+							<h2 class="t-h2">Let’s find a time</h2>
+							<p class="t-b">Call or email and we’ll set up a time that works for you.</p>
+							<a class="btn btn-primary big" href={CONTACT.phoneHref}><Icon name="phone" /><span>{CONTACT.phone}</span></a>
+							<a class="btn btn-secondary big" href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Book a call')}`}>
+								<Icon name="mail" /><span>Email us</span>
+							</a>
+						</div>
+					)}
+				</div>
+			</section>
+		</main>
+
+		<SiteFooter />
+
+		<style>
+			.book {
+				display: grid;
+				gap: var(--s-7);
+				padding-block: var(--s-8) var(--s-9);
+				align-items: start;
+			}
+			@media (min-width: 1040px) {
+				.book { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: var(--s-8); padding-block: var(--s-9); }
+				.pitch { position: sticky; top: 120px; }
+			}
+
+			/* Pitch */
+			.eyebrow { color: var(--text-link); margin-bottom: var(--s-4); }
+			.sub { margin-top: var(--s-4); color: var(--text-secondary); max-width: 34rem; }
+			.perks { list-style: none; padding: 0; margin-top: var(--s-6); display: grid; gap: var(--s-4); }
+			.perks li { display: flex; gap: var(--s-4); align-items: flex-start; }
+			.spot {
+				display: grid; place-items: center; flex: none;
+				width: 48px; height: 48px;
+				border: 1.5px solid var(--text-primary); border-radius: var(--radius-m);
+			}
+			.perk-title { display: block; font-family: var(--font-display); font-weight: 700; font-size: 1.125rem; letter-spacing: -0.01em; }
+			.perk-note { display: block; color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.45; }
+			.alt { margin-top: var(--s-6); color: var(--text-secondary); }
+			.alt a, .fine a { color: var(--text-link); font-weight: 600; }
+
+			/* Card */
+			.card {
+				background: var(--bg-surface);
+				border: 1.5px solid var(--text-primary);
+				border-radius: var(--radius-m);
+				padding: var(--s-3);
+				box-shadow: 0 24px 48px -32px color-mix(in srgb, var(--text-primary) 45%, transparent);
+				overflow: hidden;
+			}
+
+			/* Google's booking widget is light-only, so its frame stays white */
+			.frame { position: relative; background: #fff; border-radius: var(--radius-s); min-height: 680px; }
+			.frame iframe { display: block; width: 100%; height: 680px; border: 0; position: relative; }
+			@media (max-width: 640px) { .frame, .frame iframe { min-height: 760px; height: 760px; } }
+			.loading {
+				position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: var(--s-2);
+				color: #5f6368; font-weight: 500;
+			}
+			.frame.is-loaded .loading { display: none; }
+			.fine { color: var(--text-tertiary); text-align: center; padding: var(--s-3) 0 var(--s-1); }
+
+			/* No embed */
+			.fallback { display: grid; gap: var(--s-4); justify-items: start; padding: var(--s-4); }
+			@media (min-width: 640px) { .fallback { padding: var(--s-6); } }
+			.fallback p { color: var(--text-secondary); }
+			.mark {
+				display: grid; place-items: center; width: 64px; height: 64px;
+				border-radius: 50%; border: 1.5px solid var(--text-primary);
+			}
+			.big { width: 100%; min-height: 56px; font-size: 1.0625rem; }
+		</style>
+	</body>
+</html>

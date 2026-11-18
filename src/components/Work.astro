@@ -1,0 +1,294 @@
+---
+/*
+  "Our work": a slow, continuous marquee of large browser frames.
+  - The list renders twice; the track slides by -50% so the loop is seamless.
+    The second copy is aria-hidden and its links are out of the tab order.
+  - Hover or keyboard focus pauses it. Off-screen pauses it.
+  - Reduced motion: no marquee; the row becomes a swipeable, snap-scrolling list.
+*/
+import Icon from './Icon.astro';
+import Eyebrow from './Eyebrow.astro';
+import { PROJECTS } from '../consts';
+
+const host = (url: string) => new URL(url).hostname.replace(/^www\./, '');
+// Fill each marquee group with at least 6 cards so the row never runs short on wide screens.
+// Repeats beyond the first pass are hidden from screen readers and the tab order.
+const perGroup = Math.max(PROJECTS.length, Math.ceil(6 / PROJECTS.length) * PROJECTS.length);
+const slots = Array.from({ length: perGroup }, (_, k) => ({ p: PROJECTS[k % PROJECTS.length], i: k % PROJECTS.length, repeat: k >= PROJECTS.length }));
+const accents = ['var(--c-blue)', 'var(--c-tangerine)', 'var(--lime-600)', 'var(--pink-600)', 'var(--c-navy)', 'var(--amber-500)'];
+---
+
+<section class="work" id="work" aria-labelledby="work-title">
+	<div class="wrap work-head">
+		<div class="head-copy">
+			<Eyebrow>Our work</Eyebrow>
+			<h2 class="t-h1" id="work-title">Websites we’ve built for local businesses.</h2>
+		</div>
+		<a class="btn btn-ghost-dark" href="#contact"><span>Start your project</span><Icon name="arrow-right" /></a>
+	</div>
+
+	<div class="marquee">
+		<div class="track">
+			{[0, 1].map((copy) => (
+				<ul class="group" aria-hidden={copy === 1 ? 'true' : undefined}>
+					{slots.map(({ p, i, repeat }) => (
+						<li class="project" aria-hidden={repeat && copy === 0 ? 'true' : undefined}>
+							<a class="frame" href={p.url} target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+								<span class="bar">
+									<span class="dots"><i></i><i></i><i></i></span>
+									<span class="url">{host(p.url)}</span>
+								</span>
+								<span class="screen">
+									{p.image ? (
+										<img src={p.image} alt="" loading="lazy" decoding="async" />
+									) : (
+										<span class:list={['wf', { flip: i % 2 }]} style={`--accent:${accents[i % accents.length]}`}>
+											<span class="wf-nav"><i class="wf-logo"></i><i></i><i></i><i></i><b></b></span>
+											<span class="wf-hero">
+												<span class="wf-copy"><i class="h"></i><i class="h s"></i><i class="p"></i><i class="p s"></i><b></b></span>
+												<span class="wf-img"></span>
+											</span>
+											<span class="wf-cards"><i></i><i></i><i></i></span>
+										</span>
+									)}
+								</span>
+							</a>
+							<div class="meta">
+								<div>
+									<h3 class="t-h3">{p.title}</h3>
+									<p class="t-small type">{p.type}</p>
+								</div>
+								<a
+									class="visit"
+									href={p.url}
+									target="_blank"
+									rel="noopener"
+									tabindex={copy === 1 || repeat ? -1 : undefined}
+								>
+									<span>Visit site<span class="sr-only">: {p.title} (opens in a new tab)</span></span>
+									<Icon name="arrow-up-right" size={20} />
+								</a>
+							</div>
+						</li>
+					))}
+				</ul>
+			))}
+		</div>
+	</div>
+</section>
+
+<script>
+	const marquee = document.querySelector<HTMLElement>('.work .marquee');
+	if (marquee && 'IntersectionObserver' in window) {
+		new IntersectionObserver(([entry]) => {
+			marquee.classList.toggle('paused', !entry.isIntersecting);
+		}).observe(marquee);
+	}
+</script>
+
+<style>
+	.work {
+		--gap: var(--s-5);
+		--card: min(86vw, 420px);
+		padding-block: var(--s-9);
+		background: var(--bg-inverse);
+		color: var(--text-inverse);
+		overflow: hidden;
+	}
+	.work-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: var(--s-5) var(--s-7);
+		margin-bottom: var(--s-7);
+	}
+	.head-copy {
+		display: grid;
+		gap: var(--s-3);
+		max-width: 40rem;
+	}
+
+	/* ---------- Marquee ---------- */
+	.marquee {
+		-webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+		mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+	}
+	.track {
+		display: flex;
+		width: max-content;
+		animation: marquee 70s linear infinite;
+	}
+	.marquee:hover .track,
+	.marquee:focus-within .track,
+	.marquee.paused .track { animation-play-state: paused; }
+	@keyframes marquee {
+		to { transform: translateX(-50%); }
+	}
+	.group {
+		display: flex;
+		gap: var(--gap);
+		padding: 0 var(--gap) 0 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	/* ---------- Project card ---------- */
+	.project {
+		display: grid;
+		gap: var(--s-4);
+		width: var(--card);
+	}
+	.frame {
+		display: block;
+		overflow: hidden;
+		border: 1px solid color-mix(in srgb, var(--text-inverse) 18%, transparent);
+		border-radius: var(--radius-m);
+		background: var(--neutral-900);
+		text-decoration: none;
+		transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.3s ease;
+	}
+	.project:hover .frame {
+		transform: translateY(-4px);
+		border-color: color-mix(in srgb, var(--text-inverse) 45%, transparent);
+	}
+	.bar {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+		height: 34px;
+		padding: 0 var(--s-3);
+		border-bottom: 1px solid color-mix(in srgb, var(--text-inverse) 12%, transparent);
+	}
+	.dots { display: flex; gap: 6px; }
+	.dots i {
+		width: 9px;
+		height: 9px;
+		border-radius: 50%;
+		background: color-mix(in srgb, var(--text-inverse) 25%, transparent);
+	}
+	.url {
+		flex: 1;
+		max-width: 60%;
+		margin-inline: auto;
+		padding: 3px 10px;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--text-inverse) 8%, transparent);
+		color: color-mix(in srgb, var(--text-inverse) 60%, transparent);
+		font-family: var(--font-mono);
+		font-size: 11px;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.screen {
+		display: block;
+		aspect-ratio: 16 / 10;
+		background: var(--neutral-50);
+		overflow: hidden;
+	}
+	.screen img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: top;
+	}
+
+	.meta {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: var(--s-4);
+	}
+	.type { color: color-mix(in srgb, var(--text-inverse) 60%, transparent); }
+	.visit {
+		display: inline-flex;
+		flex: none;
+		align-items: center;
+		gap: 6px;
+		padding-top: 2px;
+		font-weight: 600;
+		text-decoration: none;
+		color: var(--c-sky);
+	}
+	.visit:hover { color: var(--text-inverse); }
+	.visit :global(.icon) { transition: transform 0.2s ease; }
+	.visit:hover :global(.icon) { transform: translate(2px, -2px); }
+	.visit:focus-visible { outline-color: var(--blue-400); }
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	/* ---------- Placeholder wireframe (until real screenshots exist) ---------- */
+	.wf {
+		display: flex;
+		flex-direction: column;
+		gap: 6%;
+		height: 100%;
+		padding: 4% 6%;
+		color: var(--neutral-950);
+	}
+	.wf i, .wf b { display: block; border-radius: 3px; }
+	.wf-nav { display: flex; align-items: center; gap: 4%; height: 6%; }
+	.wf-nav i { width: 8%; height: 40%; background: var(--neutral-300); }
+	.wf-nav .wf-logo { width: 16%; height: 70%; margin-right: auto; background: var(--neutral-950); }
+	.wf-nav b { width: 12%; height: 100%; border-radius: 999px; background: var(--accent); }
+	.wf-hero { display: flex; gap: 6%; flex: 1; min-height: 0; }
+	.flip .wf-hero { flex-direction: row-reverse; }
+	.wf-copy {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		justify-content: center;
+		gap: 8%;
+	}
+	.wf-copy .h { width: 92%; height: 12%; background: var(--neutral-950); }
+	.wf-copy .h.s { width: 64%; }
+	.wf-copy .p { width: 86%; height: 5%; background: var(--neutral-300); }
+	.wf-copy .p.s { width: 58%; }
+	.wf-copy b { width: 38%; height: 11%; margin-top: 4%; border-radius: 999px; background: var(--accent); }
+	.wf-img {
+		flex: 1;
+		border-radius: 6px;
+		background:
+			repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--accent) 22%, transparent) 10px 11px),
+			color-mix(in srgb, var(--accent) 14%, var(--neutral-50));
+	}
+	.wf-cards { display: flex; gap: 4%; height: 18%; }
+	.wf-cards i {
+		flex: 1;
+		border: 1.5px solid var(--neutral-200);
+		border-radius: 6px;
+		background: var(--white);
+	}
+
+	/* ---------- Sizes ---------- */
+	@media (min-width: 768px) {
+		.work { --card: 520px; --gap: var(--s-6); }
+	}
+	@media (min-width: 1280px) {
+		.work { --card: 640px; padding-block: var(--s-10); }
+	}
+
+	/* Reduced motion: a swipeable row instead of a moving one */
+	@media (prefers-reduced-motion: reduce) {
+		.marquee {
+			overflow-x: auto;
+			scroll-snap-type: x mandatory;
+			scroll-padding-inline: var(--s-4);
+			-webkit-mask-image: none;
+			mask-image: none;
+		}
+		.track { padding-inline: var(--s-4); }
+		.group[aria-hidden='true'] { display: none; }
+		.project[aria-hidden='true'] { display: none; }
+		.project { scroll-snap-align: start; }
+	}
+</style>

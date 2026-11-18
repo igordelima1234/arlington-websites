@@ -1,0 +1,382 @@
+---
+/*
+  /audit: free website audit request form.
+  Submissions go to AUDIT_FORM_ENDPOINT (src/consts.ts) when set,
+  otherwise the visitor's email app opens with the request pre-filled.
+*/
+import '../styles/brand.css';
+import '../styles/site.css';
+import ColorTokens from '../components/ColorTokens.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Icon from '../components/Icon.astro';
+import { SITE_TITLE, CONTACT, AUDIT_FORM_ENDPOINT } from '../consts';
+
+const perks = [
+	{ icon: 'bolt', title: 'Speed and mobile', note: 'How fast your site loads on a phone, and what’s slowing it down.' },
+	{ icon: 'search', title: 'Google visibility', note: 'Whether you show up for “near me” searches, and your Google Business Profile.' },
+	{ icon: 'target', title: 'Calls and leads', note: 'What stops visitors from calling or filling out your form.' },
+] as const;
+
+const goals = ['More calls and leads', 'Rank higher on Google', 'Site looks outdated', 'Not sure yet'];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Free Website Audit · {SITE_TITLE}</title>
+		<meta name="description" content="Get a free, plain-English audit of your website from a local Arlington, TX team. We'll email you what to fix first." />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+		<ColorTokens />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<SiteNav />
+
+		<main id="main">
+			<section class="wrap audit">
+				<div class="pitch">
+					<p class="t-label eyebrow">Free · No obligation</p>
+					<h1 class="t-h1">Find out what your website is costing you.</h1>
+					<p class="t-bl sub">
+						Tell us where to look. We’ll review your site by hand and email you a short report with what to fix first.
+					</p>
+
+					<ul class="perks">
+						{perks.map((p) => (
+							<li>
+								<span class="spot"><Icon name={p.icon} size={24} /></span>
+								<span>
+									<span class="perk-title">{p.title}</span>
+									<span class="perk-note">{p.note}</span>
+								</span>
+							</li>
+						))}
+					</ul>
+
+					<p class="t-small promise">
+						<Icon name="clock" size={16} />
+						<span>Report in your inbox within 2 business days.</span>
+					</p>
+				</div>
+
+				<div class="card">
+					<form class="form" data-audit-form data-endpoint={AUDIT_FORM_ENDPOINT} data-to={CONTACT.email} novalidate>
+						<div class="field">
+							<label for="f-url">Your website</label>
+							<div class="url-wrap">
+								<Icon name="website" size={20} class="url-icon" />
+								<input id="f-url" name="website" type="text" inputmode="url" autocomplete="url" placeholder="yourbusiness.com" required aria-describedby="f-url-msg" />
+							</div>
+							<p class="msg" id="f-url-msg" aria-live="polite"></p>
+						</div>
+
+						<div class="row">
+							<div class="field">
+								<label for="f-name">Your name</label>
+								<input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-msg" />
+								<p class="msg" id="f-name-msg" aria-live="polite"></p>
+							</div>
+							<div class="field">
+								<label for="f-email">Email</label>
+								<input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="f-email-msg" />
+								<p class="msg" id="f-email-msg" aria-live="polite"></p>
+							</div>
+						</div>
+
+						<fieldset class="field">
+							<legend>What matters most right now? <span class="opt">Optional</span></legend>
+							<div class="chips">
+								{goals.map((g) => (
+									<label class="chip">
+										<input type="radio" name="goal" value={g} />
+										<span><Icon name="check" size={16} />{g}</span>
+									</label>
+								))}
+							</div>
+						</fieldset>
+
+						<details class="more">
+							<summary>
+								<Icon name="plus" size={16} class="more-icon" />
+								<span>Add a phone number or note</span>
+							</summary>
+							<div class="more-body">
+								<div class="field">
+									<label for="f-phone">Phone <span class="opt">Optional</span></label>
+									<input id="f-phone" name="phone" type="tel" autocomplete="tel" />
+								</div>
+								<div class="field">
+									<label for="f-note">Anything we should know? <span class="opt">Optional</span></label>
+									<textarea id="f-note" name="note" rows="3" placeholder="e.g. We get traffic but hardly any calls."></textarea>
+								</div>
+							</div>
+						</details>
+
+						<!-- Spam trap: hidden from people, bots fill it in -->
+						<input class="trap" type="text" name="company_site" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+						<button class="btn btn-primary submit" type="submit">
+							<span data-submit-label>Request my free audit</span><Icon name="arrow-right" />
+						</button>
+						<p class="t-small fine">We’ll only use your details to send the audit. No spam, no sales pitch you didn’t ask for.</p>
+						<p class="form-error" role="alert" data-form-error></p>
+					</form>
+
+					<div class="done" data-done hidden tabindex="-1">
+						<span class="done-mark"><Icon name="check" size={32} /></span>
+						<h2 class="t-h2" data-done-title>You’re on the list.</h2>
+						<p class="t-b" data-done-text></p>
+						<a class="btn btn-secondary" href="/"><span>Back to home</span></a>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<SiteFooter />
+
+		<script>
+			const form = document.querySelector<HTMLFormElement>('[data-audit-form]')!;
+			const done = document.querySelector<HTMLElement>('[data-done]')!;
+			const formError = document.querySelector<HTMLElement>('[data-form-error]')!;
+			const label = document.querySelector<HTMLElement>('[data-submit-label]')!;
+			const { endpoint, to } = form.dataset;
+
+			const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+			const domainOf = (raw: string) => {
+				const v = raw.trim();
+				if (!v) return '';
+				try {
+					const u = new URL(/^https?:\/\//i.test(v) ? v : `https://${v}`);
+					return u.hostname.includes('.') ? u.hostname.replace(/^www\./, '') : '';
+				} catch {
+					return '';
+				}
+			};
+
+			const rules: Record<string, (v: string) => string> = {
+				website: (v) => (!v.trim() ? 'Enter your website address.' : !domainOf(v) ? 'That doesn’t look like a web address. Try yourbusiness.com' : ''),
+				name: (v) => (v.trim() ? '' : 'Tell us who to address the report to.'),
+				email: (v) => (!v.trim() ? 'Enter the email to send the report to.' : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? '' : 'Check the email address for typos.'),
+			};
+
+			const check = (name: string, show = true) => {
+				const input = field(name);
+				const err = rules[name](input.value);
+				const msg = document.getElementById(`${input.id}-msg`)!;
+				if (show) {
+					input.setAttribute('aria-invalid', String(!!err));
+					msg.textContent = err;
+					msg.classList.toggle('is-error', !!err);
+				}
+				return !err;
+			};
+
+			// Validate on blur; once a field has shown an error, re-check as they type
+			for (const name of Object.keys(rules)) {
+				const input = field(name);
+				input.addEventListener('blur', () => input.value && check(name));
+				input.addEventListener('input', () => {
+					if (input.getAttribute('aria-invalid') === 'true') check(name);
+				});
+			}
+
+			// Friendly confirmation of which site we'll audit
+			const urlMsg = document.getElementById('f-url-msg')!;
+			field('website').addEventListener('input', () => {
+				if (field('website').getAttribute('aria-invalid') === 'true') return;
+				const d = domainOf(field('website').value);
+				urlMsg.classList.remove('is-error');
+				urlMsg.classList.toggle('is-ok', !!d);
+				urlMsg.textContent = d ? `We’ll audit ${d}` : '';
+			});
+
+			const showDone = (title: string, text: string) => {
+				form.hidden = true;
+				done.hidden = false;
+				done.querySelector('[data-done-title]')!.textContent = title;
+				done.querySelector('[data-done-text]')!.textContent = text;
+				done.focus();
+			};
+
+			form.addEventListener('submit', async (e) => {
+				e.preventDefault();
+				formError.textContent = '';
+				const results = Object.keys(rules).map((n) => check(n));
+				if (results.includes(false)) {
+					form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+					return;
+				}
+				if (field('company_site').value) return; // bot
+
+				const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+				delete data.company_site;
+				const domain = domainOf(data.website);
+				const first = data.name.trim().split(/\s+/)[0];
+
+				if (!endpoint) {
+					const body = [
+						`Website: ${data.website}`,
+						`Name: ${data.name}`,
+						`Email: ${data.email}`,
+						data.goal && `Main goal: ${data.goal}`,
+						data.phone && `Phone: ${data.phone}`,
+						data.note && `Note: ${data.note}`,
+					].filter(Boolean).join('\n');
+					window.location.href = `mailto:${to}?subject=${encodeURIComponent(`Free website audit: ${domain}`)}&body=${encodeURIComponent(body)}`;
+					showDone(
+						'Almost done: hit send.',
+						`Your email app should have opened with your request for ${domain}. Send it and we’ll email your audit to ${data.email} within 2 business days. Nothing opened? Email us at ${to}.`,
+					);
+					return;
+				}
+
+				const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+				btn.disabled = true;
+				label.textContent = 'Sending…';
+				try {
+					const res = await fetch(endpoint, {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+						body: JSON.stringify({ ...data, _subject: `Free website audit: ${domain}` }),
+					});
+					if (!res.ok) throw new Error(String(res.status));
+					showDone(`Thanks, ${first}. You’re on the list.`, `We’ll review ${domain} and email your audit to ${data.email} within 2 business days.`);
+				} catch {
+					formError.textContent = `Something went wrong sending your request. Please try again, or email us at ${to}.`;
+					btn.disabled = false;
+					label.textContent = 'Request my free audit';
+				}
+			});
+		</script>
+
+		<style>
+			.audit {
+				display: grid;
+				gap: var(--s-7);
+				padding-block: var(--s-8) var(--s-9);
+				align-items: start;
+			}
+			@media (min-width: 960px) {
+				.audit { grid-template-columns: 1fr minmax(0, 520px); gap: var(--s-8); padding-block: var(--s-9); }
+				.pitch { position: sticky; top: 120px; }
+			}
+
+			/* Pitch */
+			.eyebrow { color: var(--text-link); margin-bottom: var(--s-4); }
+			.sub { margin-top: var(--s-4); color: var(--text-secondary); max-width: 34rem; }
+			.perks { list-style: none; padding: 0; margin-top: var(--s-6); display: grid; gap: var(--s-4); }
+			.perks li { display: flex; gap: var(--s-4); align-items: flex-start; }
+			.spot {
+				display: grid; place-items: center; flex: none;
+				width: 48px; height: 48px;
+				border: 1.5px solid var(--text-primary); border-radius: var(--radius-m);
+			}
+			.perk-title { display: block; font-family: var(--font-display); font-weight: 700; font-size: 1.125rem; letter-spacing: -0.01em; }
+			.perk-note { display: block; color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.45; }
+			.promise {
+				display: inline-flex; align-items: center; gap: var(--s-2);
+				margin-top: var(--s-6); padding: var(--s-2) var(--s-3);
+				background: var(--bg-subtle); border-radius: var(--radius-s);
+				color: var(--text-secondary); font-weight: 500;
+			}
+
+			/* Card */
+			.card {
+				background: var(--bg-surface);
+				border: 1.5px solid var(--text-primary);
+				border-radius: var(--radius-m);
+				padding: var(--s-5);
+				box-shadow: 0 24px 48px -32px color-mix(in srgb, var(--text-primary) 45%, transparent);
+			}
+			@media (min-width: 640px) { .card { padding: var(--s-6); } }
+
+			.form { display: grid; gap: var(--s-5); }
+			.row { display: grid; gap: var(--s-5); }
+			@media (min-width: 560px) { .row { grid-template-columns: 1fr 1fr; gap: var(--s-4); } }
+
+			.field { display: grid; gap: 6px; border: 0; margin: 0; padding: 0; min-width: 0; }
+			label, legend { font-weight: 600; font-size: 0.9375rem; padding: 0; }
+			.opt { font-weight: 500; color: var(--text-tertiary); font-size: var(--fs-small); margin-left: 4px; }
+
+			input:not([type='radio']), textarea {
+				width: 100%; min-height: 48px; padding: var(--s-3);
+				border: 1.5px solid var(--border-strong); border-radius: var(--radius-s);
+				background: var(--bg-surface); color: var(--text-primary);
+				font: inherit; font-size: 1rem;
+				transition: border-color 0.15s ease;
+			}
+			textarea { resize: vertical; line-height: 1.5; }
+			input:not([type='radio']):hover, textarea:hover { border-color: var(--text-secondary); }
+			input:not([type='radio']):focus, textarea:focus { outline: 2px solid var(--border-focus); outline-offset: 0; border-color: var(--border-focus); }
+			input[aria-invalid='true'] { border-color: var(--danger-border); }
+			::placeholder { color: var(--text-tertiary); }
+
+			.url-wrap { position: relative; }
+			.url-wrap :global(.url-icon) { position: absolute; left: var(--s-3); top: 50%; transform: translateY(-50%); color: var(--text-tertiary); pointer-events: none; }
+			.url-wrap input { padding-left: 44px; font-size: 1.0625rem; min-height: 56px; }
+
+			.msg { font-size: var(--fs-small); min-height: 0; }
+			.msg:empty { display: none; }
+			.msg.is-error { color: var(--danger-fg); }
+			.msg.is-ok { color: var(--success-fg); }
+
+			/* Goal chips */
+			.chips { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: 4px; }
+			.chip { position: relative; font-weight: 500; }
+			.chip input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+			.chip span {
+				display: inline-flex; align-items: center; gap: 6px;
+				min-height: 40px; padding: 0 var(--s-3);
+				border: 1.5px solid var(--border-strong); border-radius: 999px;
+				font-size: 0.9375rem; color: var(--text-secondary);
+				pointer-events: none;
+				transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+			}
+			.chip span :global(.icon) { display: none; }
+			.chip:hover span { border-color: var(--text-primary); color: var(--text-primary); }
+			.chip:has(input:checked) span { background: var(--text-primary); border-color: var(--text-primary); color: var(--bg-surface); }
+			.chip:has(input:checked) span :global(.icon) { display: block; }
+			.chip:has(input:focus-visible) span { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+
+			/* Optional extras */
+			.more summary {
+				display: inline-flex; align-items: center; gap: var(--s-2);
+				font-weight: 600; font-size: 0.9375rem; color: var(--text-link);
+				cursor: pointer; list-style: none;
+			}
+			.more summary::-webkit-details-marker { display: none; }
+			.more summary :global(.more-icon) { transition: transform 0.2s ease; }
+			.more[open] summary :global(.more-icon) { transform: rotate(45deg); }
+			.more-body { display: grid; gap: var(--s-4); margin-top: var(--s-4); }
+
+			.trap { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+			.submit { width: 100%; min-height: 56px; font-size: 1.0625rem; }
+			.submit:disabled { opacity: 0.7; cursor: progress; }
+			.fine { color: var(--text-tertiary); text-align: center; margin-top: calc(-1 * var(--s-2)); }
+			.form-error { color: var(--danger-fg); font-size: var(--fs-small); font-weight: 600; }
+			.form-error:empty { display: none; }
+
+			/* Success */
+			.done { display: grid; gap: var(--s-4); justify-items: start; padding-block: var(--s-4); }
+			.done[hidden] { display: none; }
+			.done:focus { outline: none; }
+			.done-mark {
+				display: grid; place-items: center; width: 64px; height: 64px;
+				border-radius: 50%; background: var(--success-bg); color: var(--success-fg);
+				border: 1.5px solid var(--success-border);
+			}
+			.done p { color: var(--text-secondary); }
+		</style>
+	</body>
+</html>

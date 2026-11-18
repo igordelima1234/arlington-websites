@@ -1,0 +1,136 @@
+---
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { SITE_TITLE, CONTACT } from '../consts';
+
+const year = new Date().getFullYear();
+
+const columns = [
+	{
+		title: 'Services',
+		links: [
+			{ label: 'Websites', href: '#services' },
+			{ label: 'Local SEO', href: '#services' },
+			{ label: 'Google Business Profile', href: '#services' },
+			{ label: 'Ads', href: '#services' },
+		],
+	},
+	{
+		title: 'Company',
+		links: [
+			{ label: 'Our work', href: '#work' },
+			{ label: 'About', href: '#about' },
+			{ label: 'Contact', href: '#contact' },
+		],
+	},
+];
+---
+
+<footer class="site-footer" id="contact">
+	<div class="wrap">
+		<div class="foot-top">
+			<div class="foot-brand">
+				<a class="logo" href="/"><Logo /></a>
+				<p class="t-b foot-tag">Marketing for the businesses on your block.</p>
+				<a class="btn btn-primary" href="/book-a-call"><Icon name="calendar" /><span>Book a call</span></a>
+			</div>
+
+			{columns.map((c) => (
+				<nav class="foot-col" aria-label={c.title}>
+					<h2 class="t-label">{c.title}</h2>
+					<ul>
+						{c.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+					</ul>
+				</nav>
+			))}
+
+			<div class="foot-col">
+				<h2 class="t-label">Get in touch</h2>
+				<ul>
+					<li><a href={CONTACT.phoneHref}><Icon name="phone" size={16} />{CONTACT.phone}</a></li>
+					<li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={16} />{CONTACT.email}</a></li>
+					<li><span><Icon name="map-pin" size={16} />{CONTACT.area}</span></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="foot-bottom t-small">
+			<span>© {year} {SITE_TITLE}. All rights reserved.</span>
+			<span>Built in Arlington, TX. Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.</span>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		background: var(--bg-inverse);
+		color: var(--text-inverse);
+		border-top: 1px solid color-mix(in srgb, var(--text-inverse) 14%, transparent);
+		padding-block: var(--s-9) var(--s-6);
+	}
+	.foot-top {
+		display: grid;
+		gap: var(--s-7);
+		grid-template-columns: 1fr;
+	}
+	.foot-brand {
+		display: grid;
+		gap: var(--s-4);
+		justify-items: start;
+		align-content: start;
+	}
+	.logo :global(.aw-logo) { height: 40px; max-width: 100%; }
+	.logo { max-width: 100%; }
+	.foot-tag {
+		max-width: 22rem;
+		color: color-mix(in srgb, var(--text-inverse) 75%, transparent);
+	}
+	.foot-brand .btn { margin-top: var(--s-2); }
+
+	.foot-col h2 {
+		margin-bottom: var(--s-4);
+		color: var(--c-sky);
+	}
+	.foot-col ul {
+		display: grid;
+		gap: var(--s-3);
+		padding: 0;
+		list-style: none;
+	}
+	.foot-col a,
+	.foot-col span {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--s-2);
+		text-decoration: none;
+		color: color-mix(in srgb, var(--text-inverse) 85%, transparent);
+		overflow-wrap: anywhere;
+	}
+	.foot-col a:hover {
+		color: var(--text-inverse);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+	.foot-col :global(.icon) { flex: none; }
+
+	.foot-bottom a { color: inherit; text-underline-offset: 3px; }
+	.foot-bottom {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: var(--s-2) var(--s-5);
+		margin-top: var(--s-8);
+		padding-top: var(--s-5);
+		border-top: 1px solid color-mix(in srgb, var(--text-inverse) 18%, transparent);
+		color: color-mix(in srgb, var(--text-inverse) 65%, transparent);
+	}
+
+	@media (min-width: 640px) {
+		.foot-top { grid-template-columns: 1fr 1fr; }
+		.foot-brand { grid-column: span 2; }
+	}
+	@media (min-width: 1024px) {
+		.foot-top { grid-template-columns: 1.6fr 1fr 1fr 1.2fr; }
+		.foot-brand { grid-column: auto; }
+	}
+</style>

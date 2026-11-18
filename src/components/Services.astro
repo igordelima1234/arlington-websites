@@ -1,0 +1,187 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../icons';
+
+// Same color pairs as the hero tiles, so each service keeps one color across the page.
+const services: {
+	name: string;
+	icon: IconName;
+	bg: string;
+	fg: string;
+	summary: string;
+	includes: string[];
+}[] = [
+	{
+		name: 'Websites',
+		icon: 'website',
+		bg: 'var(--c-sky)',
+		fg: 'var(--c-navy)',
+		summary:
+			'A fast, mobile-first site that tells people what you do, where you are, and how to reach you, in about five seconds.',
+		includes: ['Custom design, no templates', 'Click-to-call and booking built in', 'Hosting, updates and fixes handled'],
+	},
+	{
+		name: 'Local SEO',
+		icon: 'search',
+		bg: 'var(--c-lime)',
+		fg: 'var(--c-forest)',
+		summary:
+			'Show up when someone in Arlington, Grand Prairie or Mansfield searches for what you sell, not three pages down.',
+		includes: ['Keyword and competitor research', 'On-page fixes and local landing pages', 'Citations and directory cleanup'],
+	},
+	{
+		name: 'Google Business Profile',
+		icon: 'map-pin',
+		bg: 'var(--c-pink)',
+		fg: 'var(--c-plum)',
+		summary:
+			'Your profile is often the first thing customers see. We keep it accurate, active and full of good reviews.',
+		includes: ['Hours, photos and services kept current', 'Weekly posts and offers', 'Review requests and replies'],
+	},
+	{
+		name: 'Ads',
+		icon: 'megaphone',
+		bg: 'var(--c-tangerine)',
+		fg: 'var(--c-graphite)',
+		summary:
+			'Google and Meta ads aimed at the zip codes you actually serve, with a clear cost per call each month.',
+		includes: ['Campaign setup and targeting', 'Call and form tracking', 'Monthly budget and results review'],
+	},
+];
+---
+
+<section class="services" id="services" aria-labelledby="services-title">
+	<div class="wrap">
+		<div class="services-head">
+			<p class="t-label eyebrow">What we do</p>
+			<h2 class="t-h1" id="services-title">Everything it takes to get found locally.</h2>
+			<p class="t-bl lede">
+				Pick one service or let us run all four. Either way, you get one team, one monthly
+				report, and a number you can call.
+			</p>
+		</div>
+
+		<ol class="service-grid">
+			{services.map((s, i) => (
+				<li class="service">
+					<div class="service-top">
+						<span class="spot" style={`background:${s.bg};color:${s.fg}`}>
+							<Icon name={s.icon} size={32} />
+						</span>
+						<span class="t-label num">{String(i + 1).padStart(2, '0')}</span>
+					</div>
+					<h3 class="t-h2">{s.name}</h3>
+					<p class="t-b summary">{s.summary}</p>
+					<ul class="includes t-small">
+						{s.includes.map((item) => (
+							<li><Icon name="check" size={16} />{item}</li>
+						))}
+					</ul>
+				</li>
+			))}
+		</ol>
+
+		<div class="services-cta">
+			<div>
+				<h3 class="t-h3">Not sure where to start?</h3>
+				<p class="t-b">We'll look at your site, Google profile and search rankings and tell you what to fix first. Free, no pitch.</p>
+			</div>
+			<a class="btn btn-primary" href="/audit"><span>Get a free audit</span><Icon name="arrow-right" /></a>
+		</div>
+	</div>
+</section>
+
+<style>
+	.services {
+		padding-block: var(--s-9);
+		background: var(--bg-surface);
+		border-top: 1px solid var(--border-subtle);
+	}
+	.services-head {
+		display: grid;
+		gap: var(--s-4);
+		max-width: 44rem;
+		margin-bottom: var(--s-8);
+	}
+	.eyebrow { color: var(--action-primary); }
+	.lede { color: var(--text-secondary); }
+
+	.service-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--s-4);
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+	.service {
+		display: grid;
+		align-content: start;
+		gap: var(--s-4);
+		padding: var(--s-6) var(--s-5);
+		background: var(--bg-canvas);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-m);
+	}
+	.service-top {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		margin-bottom: var(--s-2);
+	}
+	.spot {
+		display: inline-grid;
+		place-items: center;
+		width: 64px;
+		height: 64px;
+		border-radius: var(--radius-m);
+	}
+	.num { color: var(--text-tertiary); }
+	.summary { color: var(--text-secondary); max-width: 36rem; }
+
+	.includes {
+		display: grid;
+		gap: var(--s-2);
+		padding: var(--s-4) 0 0;
+		margin-top: var(--s-2);
+		border-top: 1px solid var(--border-subtle);
+		list-style: none;
+	}
+	.includes li {
+		display: flex;
+		align-items: center;
+		gap: var(--s-2);
+		font-weight: 500;
+	}
+	.includes :global(.icon) { flex: none; color: var(--success-fg); }
+
+	.services-cta {
+		display: grid;
+		gap: var(--s-5);
+		align-items: center;
+		margin-top: var(--s-7);
+		padding: var(--s-6) var(--s-5);
+		background: var(--bg-inverse);
+		color: var(--text-inverse);
+		border-radius: var(--radius-m);
+	}
+	.services-cta > div { display: grid; gap: var(--s-2); }
+	.services-cta p {
+		max-width: 40rem;
+		color: color-mix(in srgb, var(--text-inverse) 78%, transparent);
+	}
+	.services-cta .btn { justify-self: start; }
+
+	@media (min-width: 768px) {
+		.service-grid { grid-template-columns: 1fr 1fr; }
+		.service { padding: var(--s-7) var(--s-6); }
+		.services-cta {
+			grid-template-columns: 1fr auto;
+			gap: var(--s-7);
+			padding: var(--s-6) var(--s-7);
+		}
+	}
+	@media (min-width: 1024px) {
+		.services { padding-block: var(--s-10); }
+	}
+</style>
