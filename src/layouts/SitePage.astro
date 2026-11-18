@@ -29,7 +29,10 @@ const { title, description = SITE_DESCRIPTION, noindex = false } = Astro.props;
 		<title>{title} · {SITE_TITLE}</title>
 		<meta name="description" content={description} />
 		{noindex && <meta name="robots" content="noindex" />}
+		<link rel="icon" href="/favicon.ico" sizes="48x48" />
+		<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
 		<ColorTokens />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
