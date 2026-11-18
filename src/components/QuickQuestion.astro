@@ -1,0 +1,260 @@
+---
+/*
+  Floating "Quick question?" chat bubble, bottom right.
+  Click opens a small name / email / question form that posts to
+  QUESTION_FORM_ENDPOINT (src/pages/api/question.ts → email via Resend).
+*/
+import Icon from './Icon.astro';
+import { CONTACT, QUESTION_FORM_ENDPOINT } from '../consts';
+---
+
+<div class="qq" data-qq data-endpoint={QUESTION_FORM_ENDPOINT} data-to={CONTACT.email}>
+	<section class="qq-panel" id="qq-panel" role="dialog" aria-labelledby="qq-title" hidden>
+		<header class="qq-head">
+			<h2 id="qq-title">Quick question? Ask here</h2>
+			<button class="qq-x" type="button" data-qq-close aria-label="Close"><Icon name="close" size={20} /></button>
+		</header>
+
+		<form class="qq-form" data-qq-form novalidate>
+			<label class="qq-sr" for="qq-name">Name</label>
+			<input id="qq-name" name="name" type="text" placeholder="Name" autocomplete="name" required maxlength="200" />
+			<label class="qq-sr" for="qq-email">Email</label>
+			<input id="qq-email" name="email" type="email" placeholder="Email" autocomplete="email" required maxlength="200" />
+			<label class="qq-sr" for="qq-question">Question</label>
+			<textarea id="qq-question" name="question" rows="3" placeholder="Your question" required maxlength="2000"></textarea>
+			<input class="qq-hp" name="company_site" tabindex="-1" autocomplete="off" aria-hidden="true" />
+			<p class="qq-err" data-qq-error role="alert"></p>
+			<button class="qq-send" type="submit"><span data-qq-label>Send</span><Icon name="arrow-right" size={16} /></button>
+		</form>
+
+		<div class="qq-done" data-qq-done tabindex="-1" hidden>
+			<Icon name="check" size={20} />
+			<p>Thanks! We’ll reply by email soon.</p>
+		</div>
+	</section>
+
+	<button class="qq-bubble" type="button" data-qq-toggle aria-expanded="false" aria-controls="qq-panel" aria-label="Ask a quick question">
+		<Icon name="chat" size={24} class="qq-i-chat" />
+		<Icon name="close" size={24} class="qq-i-close" />
+	</button>
+</div>
+
+<style>
+	.qq {
+		position: fixed;
+		right: var(--s-4);
+		bottom: var(--s-4);
+		z-index: 90;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: var(--s-3);
+		font-family: var(--font-body);
+	}
+
+	.qq-bubble {
+		display: grid;
+		place-items: center;
+		width: 56px;
+		height: 56px;
+		border: 0;
+		border-radius: 50%;
+		background: var(--action-primary);
+		color: var(--on-action-primary);
+		cursor: pointer;
+		box-shadow: 0 6px 20px rgb(0 0 0 / 0.18);
+		transition: background 0.15s ease, transform 0.15s ease;
+	}
+	.qq-bubble:hover { background: var(--action-primary-hover); transform: translateY(-2px); }
+	/* :global: the class is passed into <Icon>, which doesn't get this component's scope */
+	.qq-bubble :global(.qq-i-close) { display: none; }
+	.qq-bubble[aria-expanded='true'] :global(.qq-i-chat) { display: none; }
+	.qq-bubble[aria-expanded='true'] :global(.qq-i-close) { display: block; }
+
+	.qq-panel {
+		width: min(320px, calc(100vw - 2 * var(--s-4)));
+		padding: var(--s-4);
+		background: var(--bg-surface);
+		color: var(--text-primary);
+		border: 1px solid var(--border-subtle);
+		border-radius: var(--radius-m);
+		box-shadow: 0 12px 32px rgb(0 0 0 / 0.16);
+		animation: qq-in 0.18s ease-out;
+	}
+	.qq-panel[hidden] { display: none; }
+	@keyframes qq-in {
+		from { opacity: 0; transform: translateY(8px); }
+	}
+
+	.qq-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: var(--s-3);
+	}
+	.qq-head h2 {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: 1rem;
+		font-weight: 700;
+	}
+	.qq-x {
+		display: grid;
+		place-items: center;
+		width: 32px;
+		height: 32px;
+		margin: -6px -6px -6px 0;
+		border: 0;
+		background: none;
+		color: var(--text-secondary);
+		cursor: pointer;
+		border-radius: var(--radius-s);
+	}
+	.qq-x:hover { background: var(--bg-subtle); color: var(--text-primary); }
+
+	.qq-form { display: grid; gap: var(--s-2); }
+	.qq-form input,
+	.qq-form textarea {
+		width: 100%;
+		padding: 10px 12px;
+		border: 1px solid var(--border-strong);
+		border-radius: var(--radius-s);
+		background: var(--bg-surface);
+		color: var(--text-primary);
+		font: inherit;
+		font-size: 0.9375rem;
+		resize: vertical;
+	}
+	.qq-form ::placeholder { color: var(--text-tertiary); }
+	.qq-form [aria-invalid='true'] { border-color: var(--danger-fg); }
+
+	.qq-send {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		min-height: 40px;
+		border: 0;
+		border-radius: var(--radius-s);
+		background: var(--action-primary);
+		color: var(--on-action-primary);
+		font: inherit;
+		font-weight: 600;
+		cursor: pointer;
+	}
+	.qq-send:hover { background: var(--action-primary-hover); }
+	.qq-send:disabled { opacity: 0.6; cursor: default; }
+
+	.qq-err { margin: 0; font-size: var(--fs-small); color: var(--danger-fg); }
+	.qq-err:empty { display: none; }
+
+	.qq-done {
+		display: flex;
+		align-items: center;
+		gap: var(--s-2);
+		color: var(--success-fg);
+		outline: none;
+	}
+	.qq-done p { margin: 0; color: var(--text-primary); font-size: 0.9375rem; }
+	.qq-done[hidden] { display: none; }
+
+	.qq-sr {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+	}
+	.qq-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+	@media print { .qq { display: none; } }
+</style>
+
+<script>
+	const root = document.querySelector<HTMLElement>('[data-qq]');
+	if (root) {
+		const panel = root.querySelector<HTMLElement>('#qq-panel')!;
+		const toggle = root.querySelector<HTMLButtonElement>('[data-qq-toggle]')!;
+		const form = root.querySelector<HTMLFormElement>('[data-qq-form]')!;
+		const done = root.querySelector<HTMLElement>('[data-qq-done]')!;
+		const error = root.querySelector<HTMLElement>('[data-qq-error]')!;
+		const label = root.querySelector<HTMLElement>('[data-qq-label]')!;
+		const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+		const { endpoint, to } = root.dataset;
+		const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+		const setOpen = (open: boolean) => {
+			panel.hidden = !open;
+			toggle.setAttribute('aria-expanded', String(open));
+			if (open) (form.hidden ? done : form.querySelector<HTMLElement>('input'))?.focus();
+			else toggle.focus();
+		};
+
+		toggle.addEventListener('click', () => setOpen(panel.hidden));
+		root.querySelector('[data-qq-close]')!.addEventListener('click', () => setOpen(false));
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && !panel.hidden) setOpen(false);
+		});
+
+		const field = (n: string) => form.elements.namedItem(n) as HTMLInputElement;
+		for (const n of ['name', 'email', 'question']) {
+			field(n).addEventListener('input', () => field(n).removeAttribute('aria-invalid'));
+		}
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			error.textContent = '';
+			if (field('company_site').value) return; // bot
+
+			const data = {
+				name: field('name').value.trim(),
+				email: field('email').value.trim(),
+				question: field('question').value.trim(),
+				page: location.pathname,
+			};
+			const bad = [
+				!data.name && 'name',
+				!EMAIL_RE.test(data.email) && 'email',
+				!data.question && 'question',
+			].filter(Boolean) as string[];
+			bad.forEach((n) => field(n).setAttribute('aria-invalid', 'true'));
+			if (bad.length) {
+				error.textContent = bad.includes('email') && data.email ? 'Check your email address.' : 'Please fill in all three fields.';
+				field(bad[0]).focus();
+				return;
+			}
+
+			const finish = () => {
+				form.hidden = true;
+				done.hidden = false;
+				done.focus();
+			};
+
+			if (!endpoint) {
+				const body = `${data.question}\n\n${data.name}\n${data.email}`;
+				location.href = `mailto:${to}?subject=${encodeURIComponent(`Quick question from ${data.name}`)}&body=${encodeURIComponent(body)}`;
+				finish();
+				return;
+			}
+
+			btn.disabled = true;
+			label.textContent = 'Sending…';
+			try {
+				const res = await fetch(endpoint, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+					body: JSON.stringify(data),
+				});
+				if (!res.ok) throw new Error(String(res.status));
+				form.reset();
+				finish();
+			} catch {
+				error.textContent = `Couldn’t send. Try again, or email ${to}.`;
+			} finally {
+				btn.disabled = false;
+				label.textContent = 'Send';
+			}
+		});
+	}
+</script>

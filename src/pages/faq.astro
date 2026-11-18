@@ -1,0 +1,14 @@
+---
+import SitePage from '../layouts/SitePage.astro';
+import ComingSoon from '../components/ComingSoon.astro';
+---
+
+<SitePage title="FAQ" description="Answers about pricing, timelines and how we work." noindex>
+	<ComingSoon
+		icon="chat"
+		title="Answers are on the way."
+		lede="We’re writing up straight answers to the questions we hear most. Got one now? Book a call or use the chat bubble and we’ll answer it ourselves."
+		pointsTitle="Covering"
+		points={['What a website costs, and what’s included', 'How long a new site takes', 'What we need from you to get started']}
+	/>
+</SitePage>

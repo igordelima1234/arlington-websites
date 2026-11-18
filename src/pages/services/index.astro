@@ -1,0 +1,15 @@
+---
+import SitePage from '../../layouts/SitePage.astro';
+import ComingSoon from '../../components/ComingSoon.astro';
+import { SERVICES } from '../../consts';
+---
+
+<SitePage title="Services" description="Websites, local SEO, ads and more for small businesses in Arlington and DFW." noindex>
+	<ComingSoon
+		icon="storefront"
+		title="Everything it takes to get found locally."
+		lede="Full service pages are coming soon. Here’s what we do. Book a call and we’ll tell you which pieces would help your business most."
+		pointsTitle="What we do"
+		points={SERVICES.map((s) => `${s.label}: ${s.note}`)}
+	/>
+</SitePage>

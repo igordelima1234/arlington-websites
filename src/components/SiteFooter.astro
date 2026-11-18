@@ -1,25 +1,26 @@
 ---
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
-import { SITE_TITLE, CONTACT } from '../consts';
+import QuickQuestion from './QuickQuestion.astro';
+import { SITE_TITLE, CONTACT, SERVICES } from '../consts';
 
 const year = new Date().getFullYear();
 
 const columns = [
 	{
 		title: 'Services',
-		links: [
-			{ label: 'Websites', href: '#services' },
-			{ label: 'Local SEO', href: '#services' },
-			{ label: 'Google Business Profile', href: '#services' },
-			{ label: 'Ads', href: '#services' },
-		],
+		links: SERVICES.filter((x) => ['websites', 'local-seo', 'google-business-profile', 'ads'].includes(x.slug)).map((x) => ({
+			label: x.label,
+			href: `/services/${x.slug}`,
+		})),
 	},
 	{
 		title: 'Company',
 		links: [
-			{ label: 'Our work', href: '#work' },
-			{ label: 'About', href: '#about' },
+			{ label: 'Our work', href: '/#work' },
+			{ label: 'About', href: '/about' },
+			{ label: 'Blog', href: '/blog' },
+			{ label: 'FAQ', href: '/faq' },
 			{ label: 'Contact', href: '#contact' },
 		],
 	},
@@ -60,6 +61,8 @@ const columns = [
 		</div>
 	</div>
 </footer>
+
+<QuickQuestion />
 
 <style>
 	.site-footer {

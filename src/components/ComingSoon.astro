@@ -1,0 +1,159 @@
+---
+/*
+  ComingSoon: placeholder body for pages that aren't built yet (and the 404).
+
+  <ComingSoon
+    eyebrow="Coming soon"
+    title="The blog is on its way."
+    lede="Plain-English marketing tips for local businesses."
+    points={['How to get more Google reviews', '…']}
+  />
+*/
+import Icon from './Icon.astro';
+import Eyebrow from './Eyebrow.astro';
+
+interface Props {
+	eyebrow?: string;
+	title: string;
+	lede: string;
+	icon?: string;
+	/** Optional "what's coming" list */
+	points?: readonly string[];
+	pointsTitle?: string;
+	/** Big background mark, e.g. "404" */
+	mark?: string;
+}
+
+const {
+	eyebrow = 'Coming soon',
+	title,
+	lede,
+	icon = 'clock',
+	points = [],
+	pointsTitle = 'What you’ll find here',
+	mark,
+} = Astro.props;
+
+const meanwhile = [
+	{ icon: 'target', label: 'Free website audit', note: 'See what’s costing you calls', href: '/audit' },
+	{ icon: 'calendar', label: 'Book a call', note: '30 minutes, no pressure', href: '/book-a-call' },
+	{ icon: 'website', label: 'See our work', note: 'Sites we’ve built nearby', href: '/#work' },
+] as const;
+---
+
+<section class="soon">
+	<div class="wrap soon-inner">
+		<div class="copy">
+			{mark && <p class="mark" aria-hidden="true">{mark}</p>}
+			<Eyebrow>{eyebrow}</Eyebrow>
+			<h1 class="t-h1">{title}</h1>
+			<p class="t-bl lede">{lede}</p>
+
+			{points.length > 0 && (
+				<div class="points">
+					<p class="t-label points-title">{pointsTitle}</p>
+					<ul>
+						{points.map((p) => (
+							<li><Icon name="check" size={20} /><span>{p}</span></li>
+						))}
+					</ul>
+				</div>
+			)}
+
+			<div class="ctas">
+				<a class="btn btn-primary" href="/book-a-call"><Icon name="calendar" /><span>Book a call</span></a>
+				<a class="btn btn-secondary" href="/"><Icon name="arrow-left" /><span>Back to home</span></a>
+			</div>
+		</div>
+
+		<aside class="card" aria-labelledby="meanwhile-title">
+			<span class="spot"><Icon name={icon} size={28} /></span>
+			<h2 class="t-h3" id="meanwhile-title">In the meantime</h2>
+			<ul>
+				{meanwhile.map((m) => (
+					<li>
+						<a href={m.href}>
+							<Icon name={m.icon} size={20} />
+							<span class="text">
+								<span class="label">{m.label}</span>
+								<span class="note">{m.note}</span>
+							</span>
+							<Icon name="arrow-right" size={18} class="go" />
+						</a>
+					</li>
+				))}
+			</ul>
+		</aside>
+	</div>
+</section>
+
+<style>
+	.soon {
+		position: relative;
+		overflow: hidden;
+		padding-block: var(--s-8) var(--s-9);
+	}
+	.soon-inner {
+		display: grid;
+		gap: var(--s-7);
+		align-items: start;
+	}
+	@media (min-width: 960px) {
+		.soon { padding-block: var(--s-10); }
+		.soon-inner { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: var(--s-9); }
+	}
+
+	.copy { position: relative; display: grid; gap: var(--s-4); justify-items: start; }
+	.mark {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(5rem, 18vw, 10rem);
+		line-height: 0.85;
+		letter-spacing: -0.04em;
+		color: transparent;
+		-webkit-text-stroke: 2px var(--text-primary);
+		margin-bottom: var(--s-2);
+	}
+	.lede { color: var(--text-secondary); max-width: 36rem; }
+
+	.points { margin-top: var(--s-2); }
+	.points-title { color: var(--text-link); margin-bottom: var(--s-3); }
+	.points ul { list-style: none; padding: 0; display: grid; gap: var(--s-2); }
+	.points li { display: flex; gap: var(--s-2); align-items: flex-start; }
+	.points li :global(.icon) { flex: none; margin-top: 2px; color: var(--text-link); }
+
+	.ctas { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-4); }
+
+	.card {
+		display: grid;
+		gap: var(--s-4);
+		background: var(--bg-surface);
+		border: 1.5px solid var(--text-primary);
+		border-radius: var(--radius-m);
+		padding: var(--s-5);
+		box-shadow: 0 24px 48px -32px color-mix(in srgb, var(--text-primary) 45%, transparent);
+	}
+	.spot {
+		display: grid; place-items: center;
+		width: 56px; height: 56px;
+		border: 1.5px solid var(--text-primary);
+		border-radius: 50%;
+	}
+	.card ul { list-style: none; padding: 0; display: grid; gap: var(--s-1); }
+	.card a {
+		display: flex; align-items: center; gap: var(--s-3);
+		padding: var(--s-3);
+		margin-inline: calc(var(--s-3) * -1);
+		border-radius: var(--radius-m);
+		color: inherit;
+		text-decoration: none;
+		transition: background 0.15s ease;
+	}
+	.card a:hover { background: color-mix(in srgb, var(--text-primary) 6%, transparent); }
+	.card a :global(.icon) { flex: none; }
+	.text { display: grid; flex: 1; min-width: 0; }
+	.label { font-family: var(--font-display); font-weight: 700; }
+	.note { color: var(--text-secondary); font-size: 0.9375rem; }
+	.card a :global(.go) { transition: transform 0.2s ease; }
+	.card a:hover :global(.go) { transform: translateX(3px); }
+</style>

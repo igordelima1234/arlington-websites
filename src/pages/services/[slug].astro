@@ -1,0 +1,24 @@
+---
+/*
+  /services/<slug>: "coming soon" page for each service in SERVICES (src/consts.ts).
+  To build out a real page, add src/pages/services/<slug>.astro; it takes priority over this route.
+*/
+import SitePage from '../../layouts/SitePage.astro';
+import ComingSoon from '../../components/ComingSoon.astro';
+import { SERVICES } from '../../consts';
+
+export function getStaticPaths() {
+	return SERVICES.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+const { service } = Astro.props;
+---
+
+<SitePage title={service.label} description={`${service.label} for small businesses in Arlington, TX: ${service.note}.`} noindex>
+	<ComingSoon
+		icon={service.icon}
+		eyebrow={`${service.label} · Coming soon`}
+		title={`${service.label}: ${service.note.charAt(0).toLowerCase()}${service.note.slice(1)}.`}
+		lede={`We’re still writing up the details for this page. Want to talk about ${service.label.toLowerCase()} for your business now? Book a quick call and we’ll walk you through it.`}
+	/>
+</SitePage>

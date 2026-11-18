@@ -1,0 +1,14 @@
+---
+import SitePage from '../layouts/SitePage.astro';
+import ComingSoon from '../components/ComingSoon.astro';
+---
+
+<SitePage title="Page not found" description="We couldn’t find that page." noindex>
+	<ComingSoon
+		mark="404"
+		eyebrow="Page not found"
+		icon="search"
+		title="This page took a wrong turn on Cooper Street."
+		lede="The link may be old, or the page might have moved. Try one of these instead, or head back home."
+	/>
+</SitePage>

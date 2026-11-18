@@ -13,7 +13,7 @@ export const CONTACT = {
 	area: 'Arlington, TX',
 };
 
-// "Start here" menu in the nav. Placeholder links until these pages exist.
+// "Start here" menu in the nav.
 export const START_OPTIONS = [
 	{
 		label: 'I need a website',
@@ -25,11 +25,23 @@ export const START_OPTIONS = [
 		label: 'I already have a website',
 		note: 'Get more calls from the site you have.',
 		icon: 'trending-up',
-		href: '#contact',
+		href: '/existing-website',
 	},
 ] as const;
 
-// Sidebar menu (hamburger). Anchors and "#" links are placeholders until those pages exist.
+// Services. Each one has a page at /services/<slug> (a "coming soon" page for now,
+// see src/pages/services/[slug].astro). Used by the menu and the footer.
+export const SERVICES = [
+	{ slug: 'websites', label: 'Websites', icon: 'website', note: 'Design, build, hosting' },
+	{ slug: 'branding', label: 'Branding and design', icon: 'pen', note: 'Logos, colors, brand guidelines' },
+	{ slug: 'local-seo', label: 'Local SEO', icon: 'search', note: 'Show up in “near me” searches' },
+	{ slug: 'google-business-profile', label: 'Google Business Profile', icon: 'map-pin', note: 'Reviews, photos, posts' },
+	{ slug: 'ads', label: 'Ads', icon: 'megaphone', note: 'Google and Meta campaigns' },
+	{ slug: 'content-strategy', label: 'Content strategy', icon: 'document', note: 'What to say, and where to say it' },
+	{ slug: 'print', label: 'Print', icon: 'printer', note: 'Business cards, signs, flyers, menus' },
+] as const;
+
+// Sidebar menu (hamburger). Pages that aren't built yet show a "coming soon" page.
 export const MENU: {
 	label: string;
 	href?: string;
@@ -37,26 +49,18 @@ export const MENU: {
 }[] = [
 	{
 		label: 'Services',
-		children: [
-			{ label: 'Websites', href: '#services', icon: 'website', note: 'Design, build, hosting' },
-			{ label: 'Branding and design', href: '#services', icon: 'pen', note: 'Logos, colors, brand guidelines' },
-			{ label: 'Local SEO', href: '#services', icon: 'search', note: 'Show up in “near me” searches' },
-			{ label: 'Google Business Profile', href: '#services', icon: 'map-pin', note: 'Reviews, photos, posts' },
-			{ label: 'Ads', href: '#services', icon: 'megaphone', note: 'Google and Meta campaigns' },
-			{ label: 'Content strategy', href: '#services', icon: 'document', note: 'What to say, and where to say it' },
-			{ label: 'Print', href: '#services', icon: 'printer', note: 'Business cards, signs, flyers, menus' },
-		],
+		children: SERVICES.map((s) => ({ label: s.label, href: `/services/${s.slug}`, icon: s.icon, note: s.note })),
 	},
-	{ label: 'Our work', href: '#work' },
+	{ label: 'Our work', href: '/#work' },
 	{
 		label: 'Resources',
 		children: [
 			{ label: 'Blog', href: '/blog', icon: 'pen', note: 'Plain-English marketing tips' },
 			{ label: 'Free website audit', href: '/audit', icon: 'target', note: 'See what to fix first' },
-			{ label: 'FAQ', href: '#faq', icon: 'chat', note: 'Pricing, timelines, process' },
+			{ label: 'FAQ', href: '/faq', icon: 'chat', note: 'Pricing, timelines, process' },
 		],
 	},
-	{ label: 'About', href: '#about' },
+	{ label: 'About', href: '/about' },
 	{ label: 'Contact', href: '#contact' },
 ];
 
@@ -101,3 +105,8 @@ export const PROJECTS: { title: string; type: string; url: string; image?: strin
 		image: '/work/reeder-construction.jpg',
 	},
 ];
+
+// "Quick question?" chat bubble (QuickQuestion.astro, on every page with the
+// site footer). Posts to src/pages/api/question.ts, which emails it via Resend.
+// Set it to '' to fall back to opening the visitor's email app.
+export const QUESTION_FORM_ENDPOINT = '/api/question';
