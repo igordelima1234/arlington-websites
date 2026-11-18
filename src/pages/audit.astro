@@ -123,7 +123,7 @@ const goals = ['More calls and leads', 'Rank higher on Google', 'Site looks outd
 						</details>
 
 						<!-- Spam trap: hidden from people, bots fill it in -->
-						<input class="trap" type="text" name="company_site" tabindex="-1" autocomplete="off" aria-hidden="true" />
+						<input class="trap" type="text" name="hp_x7q" tabindex="-1" autocomplete="off" aria-hidden="true" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" />
 
 						<button class="btn btn-primary submit" type="submit">
 							<span data-submit-label>Request my free audit</span><Icon name="arrow-right" />
@@ -216,10 +216,10 @@ const goals = ['More calls and leads', 'Rank higher on Google', 'Site looks outd
 					form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
 					return;
 				}
-				if (field('company_site').value) return; // bot
+				if (field('hp_x7q').value) return; // bot
 
 				const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
-				delete data.company_site;
+				delete data.hp_x7q;
 				const domain = domainOf(data.website);
 				const first = data.name.trim().split(/\s+/)[0];
 

@@ -45,7 +45,7 @@ export async function handleFormEmail({ request, env, heading, fields, required,
 	}
 
 	// Honeypot: bots fill the hidden field. Pretend success.
-	if (raw.company_site) return json(200, { ok: true });
+	if (raw.hp_x7q) return json(200, { ok: true });
 
 	const data: Record<string, string> = {};
 	for (const [k] of fields) data[k] = String(raw[k] ?? '').trim().slice(0, 2000);

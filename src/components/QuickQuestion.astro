@@ -29,7 +29,7 @@ import { CONTACT, QUESTION_FORM_ENDPOINT } from '../consts';
 			<input id="qq-email" name="email" type="email" placeholder="Email" autocomplete="email" required maxlength="200" />
 			<label class="qq-sr" for="qq-question">Question</label>
 			<textarea id="qq-question" name="question" rows="3" placeholder="Your question" required maxlength="2000"></textarea>
-			<input class="qq-hp" name="company_site" tabindex="-1" autocomplete="off" aria-hidden="true" />
+			<input class="qq-hp" name="hp_x7q" tabindex="-1" autocomplete="off" aria-hidden="true" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" />
 			<p class="qq-err" data-qq-error role="alert"></p>
 			<button class="qq-send" type="submit"><span data-qq-label>Send</span><Icon name="arrow-right" size={16} /></button>
 		</form>
@@ -237,7 +237,7 @@ import { CONTACT, QUESTION_FORM_ENDPOINT } from '../consts';
 		form.addEventListener('submit', async (e) => {
 			e.preventDefault();
 			error.textContent = '';
-			if (field('company_site').value) return; // bot
+			if (field('hp_x7q').value) return; // bot
 
 			const data = {
 				name: field('name').value.trim(),

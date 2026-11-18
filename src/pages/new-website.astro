@@ -266,7 +266,7 @@ const next = [
 					})}
 
 					<!-- Spam trap: hidden from people, bots fill it in -->
-					<input class="trap" type="text" name="company_site" tabindex="-1" autocomplete="off" aria-hidden="true" />
+					<input class="trap" type="text" name="hp_x7q" tabindex="-1" autocomplete="off" aria-hidden="true" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" />
 				</form>
 
 				<!-- Exit: what happens next -->
@@ -513,7 +513,7 @@ const next = [
 				if (busy) return;
 				formError.textContent = '';
 				if (!validateStep(steps[current])) return;
-				const trap = form.elements.namedItem('company_site') as HTMLInputElement;
+				const trap = form.elements.namedItem('hp_x7q') as HTMLInputElement;
 				if (trap.value) return; // bot
 
 				const data = answers();
